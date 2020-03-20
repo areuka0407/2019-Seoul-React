@@ -1,9 +1,10 @@
-import App, { Container } from 'next/app';
+import App from 'next/app';
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import '../public/static/css/style.css';
-import '../public/static/bootstrap-4.4.1-dist/css/bootstrap.css';
+
+import '../public/css/style.css';
+import '../public/bootstrap-4.4.1-dist/css/bootstrap.css';
 
 
 export default class MyApp extends App {
@@ -25,11 +26,13 @@ export default class MyApp extends App {
         const {Component, pageProps} = this.props;
 
         return (
-            <Container>
+            <div>
                 <Header />
-                <Component {...pageProps} />
+                <div id="wrapper">
+                    <Component {...pageProps} />
+                </div>
                 <Footer />
-            </Container>
+            </div>
         )
     }
 }

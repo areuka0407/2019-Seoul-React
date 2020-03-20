@@ -1,11 +1,10 @@
+import React from "react";
 import Link from "next/link";
-
-const HEIGHT = 80;
 
 const NavArea = () => {
     return (
         <div>
-            <div className="fx-n1">
+            <div className="desktop fx-n1">
                 <Link href="/">
                     <a>영화제 배급사</a>
                 </Link>
@@ -19,70 +18,70 @@ const NavArea = () => {
                     <a>내 동영상</a>
                 </Link>
             </div>
-            <style jsx>{`
-                a {
-                    padding: 0 15px;
-                    color: #666;
-                    text-decoration: none;
-                }
-
-                a:hover {
-                    color: #222;
-                }
-            `}</style>
         </div>
     )
 }
 
-
-
-const AuthArea = () => {
-    return (
-        <div className="auth-area fx-n3">
-            <Link href="/sign-in">
-                <a>로그인</a>
-            </Link>
-            <Link href="/sign-in">
-                <a>회원가입</a>
-            </Link>
-            <style jsx>{`
-                a {
-                    padding: 0 15px;
-                    color: #666;
-                    text-decoration: none;
-                }
-
-                a:hover {
-                    color: #222;
-                }
-            `}</style>
+const NavItem = props => (
+    <Link href={props.url}>
+        <div className="nav-item">
+            <a>{props.text}</a>
         </div>
-    )
-}
-
-
-
-const Header = () => (
-    <header>
-        <div className="container-fluid h-100">
-            <div className="d-flex justify-content-between align-items-center h-100">
-                <Link href="/">
-                    <a>
-                        <img src='/static/images/logo.png' height="90" />
-                    </a>
-                </Link>
-                <NavArea />
-                <AuthArea />
-            </div>
-        </div>
-        <style jsx>{`
-            header {
-                height: ${HEIGHT}px;
-                box-shadow: 0 1px 3px 1px #00000020;
-                background-color: #222;
-            }
-        `}</style>
-    </header>
+    </Link>
 )
 
-export default Header;
+
+
+export default class Header extends React.Component { 
+    constructor(props){
+        super(props);
+
+        this.state = {
+            navList: [
+                { text: "영화제 배급사", url: "/distributor" },
+                { text: "추천 영화", url: "/recommand/movies" },
+                { text: "예고편 업로드", url: "/upload/movies" },
+                { text: "내 동영상", url: "/mypage/movies" }
+            ],
+            guestList: [
+                { text: "로그인", url: "/sign-in" },
+                { text: "회원가입", url: "/sign-up" }
+            ],
+            userList: [
+                { text: "로그아웃", url: "/logout" }
+            ],
+            isLogined: false
+        };
+    }
+
+    render(){
+        let navList = this.state.navList.map(({text, url}) => <NavItem text={text} url={url} />);
+        let authList = this.state.isLogined;
+        if(this.state.isLogined) authList = this.state.userList.map(({text, url}) => <NavItem text={text} url={url} />);
+        else authList = this.state.guestList.map(({text, url}) => <NavItem text={text} url={url} />);
+
+            
+
+        return (
+            <header>
+                <div className="container-fluid h-100">
+                    <div className="d-flex justify-content-between align-items-center h-100">
+                        <div class="d-flex align-items-center">
+                            <Link href="/">
+                                <a className="logo mr-1">
+                                    <img src='/images/Slogo.png' height="60" />
+                                </a>
+                            </Link>
+                        </div>
+                        <div class="nav-list d-flex">
+                            {navList}
+                        </div>
+                        <div class="nav-list d-flex">
+                            {authList}
+                        </div>
+                    </div>
+                </div>
+            </header>
+        )
+    }
+};
