@@ -1,0 +1,32 @@
+@charset "UTF-8";
+@font-face {
+    font-family: "NanumSquareRound";   
+    font-weight: bold;
+    src: url(/static/fonts/NanumSquareRoundB.ttf);
+}
+
+@font-face {
+    font-family: "NanumSquareRound";   
+    font-weight: normal;
+    src: url(/static/fonts/NanumSquareRoundR.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "NanumSqaureRound", sans-serif;
+}
+
+ol, ul { list-style: none; }
+
+.fx-n4 { font-size: 0.8em; }
+.fx-n3 { font-size: 0.85em; }
+.fx-n2 { font-size: 0.9em; }
+.fx-n1 { font-size: 0.95em; }
+.fx-1  { font-size: 1em; }
+.fx-2  { font-size: 1.1em; }
+.fx-3  { font-size: 1.2em; }
+.fx-4  { font-size: 1.4em; }
+.fx-5  { font-size: 1.6em; }
+.fx-6  { font-size: 1.8em; }
