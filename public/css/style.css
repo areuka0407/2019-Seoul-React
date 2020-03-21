@@ -4,9 +4,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "나눔바른고딕", sans-serif;
+    font-family: "Segoe UI", "나눔스퀘어", sans-serif;
 }
-
+p { word-break: keep-all; }
 ol, ul { list-style: none; }
 
 .padding { padding: 120px 0; }
@@ -21,6 +21,11 @@ ol, ul { list-style: none; }
 .fx-4  { font-size: 1.4em; }
 .fx-5  { font-size: 1.6em; }
 .fx-6  { font-size: 1.8em; }
+.fx-7  { font-size: 2.0em; }
+.fx-8  { font-size: 2.4em; }
+.fx-9  { font-size: 2.8em; }
+
+.text-shadow { text-shadow: 0 1px 4px #000a; }
 
 /* wrapper */
 
@@ -60,7 +65,8 @@ header .nav-item {
 
 header .nav-item a {
     color: #222;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.9em;
     position: relative;
 }
 
@@ -69,8 +75,8 @@ header .nav-item a::after {
     position: absolute;
     left: 50%;
     top: 100%;
-    transform: translateX(-50%) scale(0);
-    width: 100%;
+    transform: translateX(-50%);
+    width: 0;
     height: 2px;
     margin-top: 5px;
     background-color: #555;
@@ -83,8 +89,54 @@ header a:hover {
 }
 
 header .nav-item:hover > a::after {
-    transform: translateX(-50%) scale(100%)!important;
+    width: 100%;
 }
 
 
 /* /Header */
+
+
+
+/* large */
+
+@media(max-width: 992px){
+    .fx-lg-n4 { font-size: 0.8em; }
+    .fx-lg-n3 { font-size: 0.85em; }
+    .fx-lg-n2 { font-size: 0.9em; }
+    .fx-lg-n1 { font-size: 0.95em; }
+    .fx-lg-1  { font-size: 1em; }
+    .fx-lg-2  { font-size: 1.1em; }
+    .fx-lg-3  { font-size: 1.2em; }
+    .fx-lg-4  { font-size: 1.4em; }
+    .fx-lg-5  { font-size: 1.6em; }
+    .fx-lg-6  { font-size: 1.8em; }
+    .fx-lg-7  { font-size: 2.0em; }
+    .fx-lg-8  { font-size: 2.4em; }
+    .fx-lg-9  { font-size: 2.8em; }
+
+
+    #wrapper { padding-left: 0; padding-right: 0; }
+    header { padding: 0; }
+}
+
+/* /large */
+
+/* small */
+
+@media(max-width: 576px){
+    .fx-sm-n4 { font-size: 0.8em; }
+    .fx-sm-n3 { font-size: 0.85em; }
+    .fx-sm-n2 { font-size: 0.9em; }
+    .fx-sm-n1 { font-size: 0.95em; }
+    .fx-sm-1  { font-size: 1em; }
+    .fx-sm-2  { font-size: 1.1em; }
+    .fx-sm-3  { font-size: 1.2em; }
+    .fx-sm-4  { font-size: 1.4em; }
+    .fx-sm-5  { font-size: 1.6em; }
+    .fx-sm-6  { font-size: 1.8em; }
+    .fx-sm-7  { font-size: 2.0em; }
+    .fx-sm-8  { font-size: 2.4em; }
+    .fx-sm-9  { font-size: 2.8em; }
+}
+
+/* /small */
