@@ -6,8 +6,38 @@
     box-sizing: border-box;
     font-family: "Segoe UI", "나눔스퀘어", sans-serif;
 }
+a, label, button { cursor: pointer; }
+a, a:hover { text-decoration: none!important; }
 p { word-break: keep-all; }
 ol, ul { list-style: none; }
+
+.custom-btn {
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid #222;
+    background-color: transparent;
+    padding: 0.4em 0.8em;
+    font-weight: bold;
+    color: #222;
+    position: relative;
+    outline: none;
+    z-index: 1;
+}
+
+.custom-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    background-color: #222;
+    transition: 0.3s height;
+    z-index: -1;
+}
+
+.custom-btn:hover { color: #fff!important; }
+.custom-btn:hover::before { height: 100%; transition: 0.5s height; }
 
 .custom-scrollbar::-webkit-scrollbar {
     appearance: none;
@@ -23,19 +53,19 @@ ol, ul { list-style: none; }
 
 .padding { padding: 120px 0; }
 
-.fx-n4 { font-size: 0.8em; }
-.fx-n3 { font-size: 0.85em; }
-.fx-n2 { font-size: 0.9em; }
-.fx-n1 { font-size: 0.95em; }
-.fx-1  { font-size: 1em; }
-.fx-2  { font-size: 1.1em; }
-.fx-3  { font-size: 1.2em; }
-.fx-4  { font-size: 1.4em; }
-.fx-5  { font-size: 1.6em; }
-.fx-6  { font-size: 1.8em; }
-.fx-7  { font-size: 2.0em; }
-.fx-8  { font-size: 2.4em; }
-.fx-9  { font-size: 2.8em; }
+.fx-n4 { font-size: 0.8em!important; }
+.fx-n3 { font-size: 0.85em!important; }
+.fx-n2 { font-size: 0.9em!important; }
+.fx-n1 { font-size: 0.95em!important; }
+.fx-1  { font-size: 1em!important; }
+.fx-2  { font-size: 1.1em!important; }
+.fx-3  { font-size: 1.2em!important; }
+.fx-4  { font-size: 1.4em!important; }
+.fx-5  { font-size: 1.6em!important; }
+.fx-6  { font-size: 1.8em!important; }
+.fx-7  { font-size: 2.0em!important; }
+.fx-8  { font-size: 2.4em!important; }
+.fx-9  { font-size: 2.8em!important; }
 
 .text-shadow { text-shadow: 0 1px 4px #000a; }
 
@@ -101,12 +131,13 @@ header .nav-item a::after {
     transition: 0.3s;
 }
 
-header a:hover {
+header a:hover, header .nav-item.active a {
     color: #222;
     text-decoration: none;
 }
 
-header .nav-item:hover > a::after {
+header .nav-item:hover > a::after,
+header .nav-item.active > a::after {
     width: 100%;
 }
 

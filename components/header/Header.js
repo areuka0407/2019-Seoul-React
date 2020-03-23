@@ -1,13 +1,17 @@
 import React from "react";
 import Link from "next/link";
+import {useRouter} from 'next/router';
 
-const NavItem = props => (
-    <Link href={props.url}>
-        <div className="nav-item">
-            <a>{props.text}</a>
-        </div>
-    </Link>
-)
+const NavItem = props => {
+    const router = useRouter();
+    return (
+        <Link href={props.url}>
+            <div className={"nav-item" + (router.pathname == props.url ? " active" : "")}>
+                <a>{props.text}</a>
+            </div>
+        </Link>
+    )
+}
 
 export default class Header extends React.Component { 
     constructor(props){
