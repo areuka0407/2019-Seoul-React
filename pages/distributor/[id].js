@@ -29,7 +29,7 @@ function Movieinfo(props){
                     </div>
                 </div>
             </div>
-            <button className="underline-btn" onClick={() => router.replace('/movies/[id].js', '/movies/' + moviedata.idx)}>상세보기</button>
+            <button className="underline-btn fx-n2" onClick={() => router.replace('/movies/[id].js', '/movies/' + moviedata.idx)}>상세보기</button>
             <style jsx>{`
                 img {
                     width: 200px;

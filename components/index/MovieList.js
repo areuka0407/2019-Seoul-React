@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import {videos, users} from "../../public/json/data.json";
 
 function MovieItem(props){
@@ -11,6 +12,12 @@ function MovieItem(props){
                     <img src={"/images/thumbnails/" + info.thumbnail} />
                 </div>
                 <div className="text-box custom-scrollbar px-4 py-5">
+                    <Link href={"/movies/[id].js"} as={"/movies/" + info.idx} >
+                        <a>
+                            <span></span>
+                            <span></span>
+                        </a>
+                    </Link>
                     <div className="title fx-3 font-weight-bold">{info.title}</div>
                     <div className="user_name fx-n3 mt-2">{info.user.name}</div>
                     <p className="description mt-5">
@@ -19,6 +26,34 @@ function MovieItem(props){
                 </div>
             </div>
             <style jsx>{`
+                a {
+                    position: absolute;
+                    right: 30px;
+                    top: 50px;
+                    width: 40px;
+                    height: 40px;
+                    opacity: 0;
+                }
+                a span { display: block; }
+                a span:first-child {
+                    width: 0px; 
+                    height: 100%; 
+                    border-right: 1px solid #555; 
+                    margin: 0 auto;
+                }
+                a span:last-child {
+                    width: 100%; 
+                    height: 0px;  
+                    border-top: 1px solid #555; 
+                    position: relative;
+                    top: -50%;
+                }
+                .movie-item:hover a {
+                    transform: rotate(180deg);
+                    opacity: 1;
+                    transition: 0.5s;
+                }
+
                 .movie-item { height: 400px; padding: 10px; }
                 .movie-item:nth-child(3n-1) { transform: translateY(15%); }
                 @media(max-width: 992px) { 

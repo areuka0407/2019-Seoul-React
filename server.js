@@ -1,7 +1,7 @@
 const express = require('express')
 const next = require('next')
 
-const port = parseInt(process.env.PORT, 10) || 8000
+const port = parseInt(process.env.PORT, 10) || 80
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
@@ -11,10 +11,6 @@ app.prepare().then(() => {
 
   server.get('/distributor', (req, res) => {
     return app.render(req, res, '/distributor', req.query)
-  })
-
-  server.get("/distributor/:id", (req, res) => {
-    return app.render(req, res, '/distributor/[id].js', req.query)
   })
 
   server.get('/movies/recommand', (req, res) => {
