@@ -9,6 +9,18 @@
 p { word-break: keep-all; }
 ol, ul { list-style: none; }
 
+.custom-scrollbar::-webkit-scrollbar {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 5px;
+    background-color: #ddd;
+    border-radius: 2.5px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 2.5px;
+}
+
 .padding { padding: 120px 0; }
 
 .fx-n4 { font-size: 0.8em; }
@@ -56,6 +68,12 @@ header {
     background-color: #fff;
     z-index: 100;
     box-shadow: 0 1px 3px 1px #0002;
+    transition: height 0.3s;
+}
+
+header:hover {
+    height: 80px;
+    transition: 0.5s;
 }
 
 header .nav-item {
@@ -95,6 +113,45 @@ header .nav-item:hover > a::after {
 
 /* /Header */
 
+
+/* Footer */
+
+footer {
+    padding-bottom: 10px;
+    background-color: #222;
+    font-size: 0.85em;
+}
+
+footer .top {
+    height: 45px;
+    line-height: 45px;
+    color: #fffa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: #1a1a1a 1px solid;
+}
+
+footer .top > div { cursor: pointer; }
+footer .top > div:hover { color: #fff; }
+
+footer .split {
+    display: inline-block;
+    width: 1px;
+    height: 10px;
+    background-color: #fff5;
+    margin: 0 20px;
+}
+
+footer .bottom {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff5;
+    font-size: 0.9em;
+}
+
+/* /Footer */
 
 
 /* large */

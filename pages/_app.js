@@ -20,8 +20,8 @@ export default class MyApp extends App {
                 <Header />
                 <div id="wrapper">
                     <Component {...pageProps} />
+                    <Footer />
                 </div>
-                <Footer />
             </div>
         )
     }
