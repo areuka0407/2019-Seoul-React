@@ -11,7 +11,7 @@ a, a:hover { text-decoration: none!important; }
 p { word-break: keep-all; }
 ol, ul { list-style: none; }
 
-.custom-btn {
+.underline-btn {
     display: inline-block;
     border: none;
     border-bottom: 1px solid #222;
@@ -24,7 +24,7 @@ ol, ul { list-style: none; }
     z-index: 1;
 }
 
-.custom-btn::before {
+.underline-btn::before {
     content: '';
     position: absolute;
     left: 0;
@@ -36,8 +36,8 @@ ol, ul { list-style: none; }
     z-index: -1;
 }
 
-.custom-btn:hover { color: #fff!important; }
-.custom-btn:hover::before { height: 100%; transition: 0.5s height; }
+.underline-btn:hover { color: #fff!important; }
+.underline-btn:hover::before { height: 100%; transition: 0.5s height; }
 
 .custom-scrollbar::-webkit-scrollbar {
     appearance: none;

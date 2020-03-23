@@ -13,9 +13,8 @@ app.prepare().then(() => {
     return app.render(req, res, '/distributor', req.query)
   })
 
-  server.get(/\/distributor\/([0-9]+)/, (req, res) => {
-    console.log("정규식은 되는듯");
-    return app.render(req, res, '/distributor/info', req.query)
+  server.get("/distributor/:id", (req, res) => {
+    return app.render(req, res, '/distributor/[id].js', req.query)
   })
 
   server.get('/movies/recommand', (req, res) => {

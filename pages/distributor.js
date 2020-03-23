@@ -8,7 +8,7 @@ function VideoItem(props){
     const {info} = props;
     return (
         <div className="video-item d-flex align-items-center">
-            <img src={"/images/thumbnails/" + info.thumbnail} alt="섬네일 이미지"/>
+            <img src={"/images/thumbnails/" + info.thumbnail} alt="섬네일 이미지" width="200" height="130" />
             <div className="info h-100 pl-4 pr-2 py-3">
                 <div className="fx-n1 font-weight-bold">{info.title}</div>
                 <div className="fx-n4 mt-1 text-muted">
@@ -26,6 +26,7 @@ function VideoItem(props){
                 }
 
                 img {
+                    flex: 0 0 200px;
                     width: 200px;
                     height: 130px;
                     object-fit: contain;
@@ -50,7 +51,7 @@ function ListItem(props){
     const videoList = videos.filter(video => video.users_id == info.idx).sort((a, b) => a.view - b.view).slice(0, 3);
 
     return (
-        <div className="box-wrap col-md-6 col-sm-12" onClick={props.onClick}>
+        <div className="box-wrap" onClick={props.onClick}>
             <div className="box">
                 <div className="company d-flex px-4 align-items-center">
                     <img src={"/images/profiles/" + info.img} alt=""/>
@@ -61,8 +62,8 @@ function ListItem(props){
                                 <span className="mr-2">팔로워</span> 
                                 {info.follows.toLocaleString()} 명
                             </div>
-                            <Link href={'/distributor/info?id=' + info.idx} as={'/distributor/' + info.idx}>  
-                                <a className="mt-4 custom-btn fx-n2">바로가기</a>
+                            <Link href={'/distributor/[id].js'} as={'/distributor/' + info.idx}>  
+                                <a className="mt-4 underline-btn fx-n2">바로가기</a>
                             </Link>
                         </div>
                     </div>
@@ -92,8 +93,8 @@ function ListItem(props){
                 .box {
                     width: 100%;
                     height: 100%;
-                    background-color: #fff;
-                    border: 1px solid #ddd;
+                    /*background-color: #fff;
+                    border: 1px solid #ddd;*/
                     overflow: hidden;
                     position: relative;
                 }
@@ -114,7 +115,6 @@ function ListItem(props){
                 .videos {
                     margin-top: 30px;
                     user-select: none;
-                    background-color: #fff;
                 }
 
                 .videos .title {
@@ -151,7 +151,7 @@ export default class Distributor extends React.Component {
                 <Visual mainTitle="Distributor List" subTitle="영화제 참여 기업 목록" src="/images/more_img_1.jpg" />
                 <div className="container padding">
                     <div className="row align-items-start">
-                        <div className="w-100" style={{padding: "5px"}}>
+                        <div className="col-6">
                             <div className="section-title px-5 py-4">
                                 <div>
                                     <div className="fx-3 mb-3 font-weight-bold">영화 배급사 목록</div>
@@ -168,12 +168,14 @@ export default class Distributor extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        {showList.map((x, i) => <ListItem key={i} info={x} active={activeIdx == x.idx} onClick={() => this.setState({activeIdx: x.idx})} />)}
+                        <div className="col-6">
+                            {showList.map((x, i) => <ListItem key={i} info={x} active={activeIdx == x.idx} onClick={() => this.setState({activeIdx: x.idx})} />)}
+                        </div>
                     </div>
                     <style jsx>{`
                         .section-title {
-                            background-color: #fff;    
-                            border: 1px solid #ddd;
+                            /*background-color: #fff;    
+                            border: 1px solid #ddd;*/
                         }   
                     `}</style>
                 </div>
