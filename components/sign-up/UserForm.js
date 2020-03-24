@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {toast} from 'react-toastify';
+import axios from 'axios';
 
 
 
@@ -49,12 +50,16 @@ export default function UserForm(props){
         }
 
         if(error == 0) {
-            let image = document.createElement("img");
-            image.src = URL.createObjectURL(file);
-            image.name = file.name;
-            image.onload = () => {
+            new Promise(res => {
+                let reader = new FileReader();
+                reader.onload = () => res(reader.result);
+                reader.readAsDataURL(file);
+            }).then(url => new Promise(res => {
+                let image = document.createElement("img");
+                image.src = url;
+                image.name = file.name;
                 setProfile(image);
-            }
+            }))
         }
     };
 
@@ -79,6 +84,11 @@ export default function UserForm(props){
             toast("로고를 업로드해 주십시오.", toastInfo);
             error++;
         }
+
+        axios.post("/api/users", {userId, password, name, profile: profile.src})
+        .then(({data}) => {
+            console.log(data);
+        });
     };
 
     /**
