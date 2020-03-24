@@ -1,6 +1,7 @@
 import {useRouter} from 'next/router';
 import Visual from '../../components/Visual';
 import {users, videos} from '../../public/json/data.json';
+import '../../helper';
 
 function Movieinfo(props){
     const router = useRouter();
@@ -16,7 +17,7 @@ function Movieinfo(props){
                     <div className="fx-n2 text-muted mt-2">
                         <div className="mt-1">
                             <span>출품일</span>
-                            <span className="ml-2">{`${created_at.getFullYear()}-${created_at.getMonth() + 1}-${created_at.getDate()}`}</span>
+                            <span className="ml-2">{created_at.toLocaleDateString()}</span>
                         </div>
                         <div className="mt-1">
                             <span>조회수</span>

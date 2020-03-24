@@ -7,42 +7,49 @@ import {videos, users} from '../public/json/data.json';
 function VideoItem(props){
     const {info} = props;
     return (
-        <div className="video-item d-flex align-items-center">
-            <img src={"/images/thumbnails/" + info.thumbnail} alt="섬네일 이미지" width="200" height="130" />
-            <div className="info h-100 pl-4 pr-2 py-3">
-                <div className="fx-n1 font-weight-bold">{info.title}</div>
-                <div className="fx-n4 mt-1 text-muted">
-                    <span>상영 시간</span>
-                    <span className="ml-1">{info.duration}분</span>
-                    <span className="ml-2">조회수</span>
-                    <span className="ml-1">{info.view.toLocaleString()}</span>
+        <Link href="/movies/[id].js" as={"/movies/" + info.idx}>
+            <div className="video-item d-flex align-items-center">
+                <img src={"/images/thumbnails/" + info.thumbnail} alt="섬네일 이미지" width="200" height="130" />
+                <div className="info h-100 pl-4 pr-2 py-3">
+                    <div className="fx-n1 font-weight-bold">{info.title}</div>
+                    <div className="fx-n4 mt-1 text-muted">
+                        <span>상영 시간</span>
+                        <span className="ml-1">{info.duration}분</span>
+                        <span className="ml-2">조회수</span>
+                        <span className="ml-1">{info.view.toLocaleString()}</span>
+                    </div>
+                    <div className="description fx-n4 mt-3">{info.description}</div>
                 </div>
-                <div className="description fx-n4 mt-3">{info.description}</div>
+                <style jsx>{`
+                    .video-item {
+                        height: 140px;
+                        padding: 0 20px;
+                    }
+
+                    .video-item:hover {
+                        cursor: pointer;
+                        opacity: 0.8;
+                    }
+
+                    img {
+                        flex: 0 0 200px;
+                        width: 200px;
+                        height: 130px;
+                        object-fit: contain;
+                    }
+
+                    .description {
+                        line-height: 1.5em;
+                        height: 3em;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                    }
+                `}</style>
             </div>
-            <style jsx>{`
-                .video-item {
-                    height: 140px;
-                    padding: 0 20px;
-                }
-
-                img {
-                    flex: 0 0 200px;
-                    width: 200px;
-                    height: 130px;
-                    object-fit: contain;
-                }
-
-                .description {
-                    line-height: 1.5em;
-                    height: 3em;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                }
-            `}</style>
-        </div>
+        </Link>
     )
 }
 
@@ -151,7 +158,7 @@ export default class Distributor extends React.Component {
                 <Visual mainTitle="Distributor List" subTitle="영화제 참여 기업 목록" src="/images/more_img_1.jpg" />
                 <div className="container padding">
                     <div className="row align-items-start">
-                        <div className="col-6">
+                        <div className="col-md-6 col-sm-12">
                             <div className="section-title px-5 py-4">
                                 <div>
                                     <div className="fx-3 mb-3 font-weight-bold">영화 배급사 목록</div>
@@ -168,7 +175,7 @@ export default class Distributor extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-6">
+                        <div className="col-md-6 col-sm-12">
                             {showList.map((x, i) => <ListItem key={i} info={x} active={activeIdx == x.idx} onClick={() => this.setState({activeIdx: x.idx})} />)}
                         </div>
                     </div>
