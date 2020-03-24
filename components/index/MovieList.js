@@ -13,42 +13,25 @@ function MovieItem(props){
                 </div>
                 <div className="text-box custom-scrollbar px-4 py-5">
                     <Link href={"/movies/[id].js"} as={"/movies/" + info.idx} >
-                        <a>
+                        <a className="cross">
                             <span></span>
                             <span></span>
                         </a>
                     </Link>
                     <div className="title fx-3 font-weight-bold">{info.title}</div>
                     <div className="user_name fx-n3 mt-2">{info.user.name}</div>
-                    <p className="description mt-5">
-                        {info.description}
-                    </p>
                 </div>
             </div>
             <style jsx>{`
-                a {
+                .cross {
                     position: absolute;
-                    right: 30px;
-                    top: 50px;
-                    width: 40px;
-                    height: 40px;
-                    opacity: 0;
+                    left: 40px;
+                    bottom: 40px;
+                    width: 50px;
+                    height: 50px;
                 }
-                a span { display: block; }
-                a span:first-child {
-                    width: 0px; 
-                    height: 100%; 
-                    border-right: 1px solid #555; 
-                    margin: 0 auto;
-                }
-                a span:last-child {
-                    width: 100%; 
-                    height: 0px;  
-                    border-top: 1px solid #555; 
-                    position: relative;
-                    top: -50%;
-                }
-                .movie-item:hover a {
+
+                .movie-item:hover .cross {
                     transform: rotate(180deg);
                     opacity: 1;
                     transition: 0.5s;
