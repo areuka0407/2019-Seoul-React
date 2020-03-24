@@ -1,19 +1,42 @@
 import {useState, useEffect} from 'react';
+import '../../helper';
 
 
 function Timeline(props){
     const {currentTime, duration} = props;
 
+    const [clicked, setClicked] = useState(false);
+
+
+    function handleDragstart(e){
+        e.preventDefault();
+    }
+
+    function handleMouseDown(e){
+        props.onTimeControl(e);
+        setClicked(true);
+    }
+
+    const handleMousemove = (e) => {
+        clicked && props.onTimeControl(e);
+    }
+
+    const handleMouseup = (e) => {
+        setClicked(false);
+    }
+
     useEffect(() => {
-        let clicked = false;
-        document.querySelector("#time-line").addEventListener("dragstart", e => e.preventDefault());
-        document.querySelector("#time-line").addEventListener("mousedown", e => (clicked = true) && props.onTimeControl(e));
-        window.addEventListener("mousemove", e => clicked && props.onTimeControl(e));
-        window.addEventListener("mouseup", e => clicked = false);
-    }, []);
+        window.addEventListener("mousemove", handleMousemove);
+        window.addEventListener("mouseup", handleMouseup);
+
+        return () => {
+            window.removeEventListener("mousemove", handleMousemove);
+            window.removeEventListener("mouseup", handleMouseup);
+        }
+    }, [clicked]);
 
     return (
-        <div id="time-line">
+        <div id="time-line" onDragStart={handleDragstart} onMouseDown={handleMouseDown}>
             <div className="cursor-line"></div>
             <style jsx>{`
                 #time-line {
@@ -39,13 +62,18 @@ function Timeline(props){
                 .cursor-line::after {
                     content: '';
                     position: absolute;
-                    right: -4px;
                     top: 50%;
-                    transform: translateY(-50%);
-                    width: 8px;
-                    height: 8px;
+                    right: 0;
+                    transform: translate(50%, -50%) scale(${clicked ? 1 : 0});
+                    width: 15px;
+                    height: 15px;
                     border-radius: 50%;
                     background-color: #3486BB;
+                    transition: 0.3s transform;
+                }
+
+                #time-line:hover .cursor-line::after {
+                    transform: translate(50%, -50%) scale(1);
                 }
             `}</style>
         </div>
@@ -64,7 +92,6 @@ export default function Player(props){
 
     // handles
     function handleTimecontrol(e){
-        if(e.which !== 1) return;
         const $video = document.querySelector("#player video");
         const $target = document.querySelector("#time-line");
 
@@ -81,27 +108,43 @@ export default function Player(props){
         $video.currentTime = currentTime;
         setCurrentTime(X * $video.duration / $target.offsetWidth);
     }
-
     function handleStop(){
         document.querySelector("#player video").currentTime = 0;
         setCurrentTime(0);
         setPaused(true);
     }
+    function handleChangeVolume(e){
+        const v = e.target.value / 100;
+        document.querySelector("#player video").volume = v;
+        setMuted(false);
+        setVolume(v);
+    }
 
 
-    // effect
+    /**
+     * effect
+     */
+    // play & pause
     useEffect(() => {
         const $video = document.querySelector("#player video");
         paused ? $video.pause() : $video.play();
     }, [paused]);
 
+    // muted
+    useEffect(() => {
+        const $video = document.querySelector("#player video");
+        $video.muted = muted;
+    }, [muted]);
+
+    // full screen
     useEffect(() => {
         const $player = document.querySelector("#player");
-        console.log($player.exitFullscreen);
         isFullScreen ? 
             $player.requestFullscreen && $player.requestFullscreen() 
             : document.fullscreenElement && document.exitFullscreen();
     }, [isFullScreen]);
+
+    
 
 
     return (
@@ -119,6 +162,9 @@ export default function Player(props){
                     <button className="text-white" onClick={() => handleStop()}>
                         <i className="fas fa-stop"></i>
                     </button>
+                    <span>
+                        {currentTime.sectotime()} / {video.duration.sectotime()}
+                    </span>
                 </div>
                 <div className="d-flex">
                     <div className="d-flex align-items-center">
@@ -131,12 +177,12 @@ export default function Player(props){
                         <button className={muted ? "d-block" : "d-none"} onClick={() => setMuted(false)}>
                             <i className="fas fa-volume-mute"></i>
                         </button>
-                        <input type="range" className="range" min="0" max="1" value={0.5} step="0.01" />
+                        <input type="range" className="range" min="0" max="100" value={volume * 100} step="1" onChange={handleChangeVolume} />
                     </div>
-                    <button onClick={() => setIsFullScreen(!isFullScreen)}>
+                    <button className={isFullScreen ? "active" : ""} onClick={() => setIsFullScreen(!isFullScreen)}>
                         <i className="fas fa-expand"></i>
                     </button>
-                    <button className={showCaption ? " active" : ""} onClick={() => setShowCaption(!showCaption)}>
+                    <button className={showCaption ? "active" : ""} onClick={() => setShowCaption(!showCaption)}>
                         <i className="fas fa-closed-captioning"></i>
                     </button>
                 </div>
@@ -149,6 +195,7 @@ export default function Player(props){
                     position: relative;
                     background-color: #000;
                     overflow: hidden;
+                    user-select: none;
                 }
 
                 video {
@@ -183,8 +230,15 @@ export default function Player(props){
                     outline: none;
                     opacity: 0.7;
                 }
-                button:hover,
-                button.active { opacity: 1; }
+                button:hover { opacity: 1; }
+                button.active { color: #3486BB; }
+
+                span {
+                    height: 45px;
+                    line-height: 45px;
+                    padding: 0 10px;
+                    color: #ddd;
+                }
             `}</style>
         </div>
     )
