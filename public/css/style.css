@@ -6,11 +6,25 @@
     box-sizing: border-box;
     font-family: "Segoe UI", "나눔스퀘어", "나눔고딕", sans-serif;
 }
-a, label, button { cursor: pointer; }
+a, label, button { cursor: pointer; user-select: none; }
 a, a:hover { text-decoration: none!important; }
 p { word-break: keep-all; }
 ol, ul { list-style: none; }
 
+.text-shadow { text-shadow: 0 1px 4px #000a; }
+.keep-all { word-break: keep-all; }
+.pointer { cursor: pointer; }
+.padding { padding: 120px 0; }
+
+.bg-none { background: none; }
+.full-height { min-height: calc( 100vh - 165px ); }
+.position-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+
+
+.bg-light {
+    background: none;
+    background-color: #fff;
+}
 
 /* 버튼
  */
@@ -35,6 +49,17 @@ ol, ul { list-style: none; }
 }
 
 
+.white-fill-btn {
+    padding: 0.4em 0.8em;
+    border: none;
+    transition: 0.3s;
+    background-color: #fff;
+    color: #222;
+}
+.white-fill-btn:hover {
+    background-color: #ddd;
+}
+
 
 .fill-btn {
     background-color: #222;
@@ -42,6 +67,9 @@ ol, ul { list-style: none; }
     padding: 0.4em 0.8em;
     border: none;
     transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .fill-btn:hover {
     background-color: #2220;
@@ -75,6 +103,23 @@ ol, ul { list-style: none; }
 
 .underline-btn:hover { color: #fff!important; border: none; }
 .underline-btn:hover::before { height: 100%; transition: 0.5s height; }
+
+
+.border-btn {
+    background-color: transparent;
+    color: #fff;
+    padding: 0.4em 0.8em;
+    border: 1px solid #fff;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.border-btn:hover {
+    background-color: #fff;
+    color: #333;
+}
 
 
 /* 스크롤바
@@ -119,8 +164,6 @@ ol, ul { list-style: none; }
  
 
 
-.padding { padding: 120px 0; }
-
 .fx-n4 { font-size: 0.8em!important; }
 .fx-n3 { font-size: 0.85em!important; }
 .fx-n2 { font-size: 0.9em!important; }
@@ -135,7 +178,7 @@ ol, ul { list-style: none; }
 .fx-8  { font-size: 2.4em!important; }
 .fx-9  { font-size: 2.8em!important; }
 
-.text-shadow { text-shadow: 0 1px 4px #000a; }
+
 
 /* wrapper */
 
@@ -257,6 +300,9 @@ footer .bottom {
 /* large */
 
 @media(max-width: 992px){
+    .full-height-lg { min-height: calc( 100vh - 165px ); }
+    .padding-lg { padding: 120px 0; }
+
     .fx-lg-n4 { font-size: 0.8em!important; }
     .fx-lg-n3 { font-size: 0.85em!important; }
     .fx-lg-n2 { font-size: 0.9em!important; }
@@ -274,6 +320,9 @@ footer .bottom {
 
     #wrapper { padding-left: 0; padding-right: 0; }
     header { padding: 0; }
+    .full-height {
+        height: auto;
+    }
 }
 
 /* /large */

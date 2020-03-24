@@ -143,6 +143,10 @@ export default class MovieList extends React.Component {
                     height: 60px;
                     background-color: #444;
                 }
+
+                @media(max-width: 992px) {
+                    .section-title::after { display: none; }
+                }
             `}</style>
         </div>
         );

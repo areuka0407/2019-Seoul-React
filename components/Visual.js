@@ -4,7 +4,7 @@ export default function Visual(props){
     return (
         <div className="visual">
             <div className="text text-center">
-                <div className="fx-6 font-weight-lighter">{mainTitle}</div>
+                <div className="fx-6 font-weight-bold">{mainTitle}</div>
                 <div className="fx-n1 mt-2 font-weight-lighter">{subTitle}</div>
             </div>
             <style jsx>{`
@@ -23,7 +23,7 @@ export default function Visual(props){
                     height: 100%;
                     filter: brightness(50%);
                     background-image: url(${src});
-                    background-color: rgba(27, 43, 82, 1);
+                    background-color: #1b2b52;
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center center;
@@ -35,6 +35,7 @@ export default function Visual(props){
                     left: 50%;
                     top: 50%;
                     transform: translate(-50%, -50%);
+                    width: 100%;
                 }
             `}</style>
         </div>

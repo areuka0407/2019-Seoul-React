@@ -1,71 +1,9 @@
 import {useRouter} from 'next/router';
 import Visual from '../../components/Visual';
 import {users, videos} from '../../public/json/data.json';
+import Movieinfo from '../../components/distributor/info/Movieinfo';
+import Userinfo from '../../components/distributor/info/Userinfo';
 import '../../helper';
-
-function Movieinfo(props){
-    const router = useRouter();
-    const {moviedata} = props;
-    const created_at = new Date(moviedata.date);
-
-    return (
-        <div className="w-100 py-3 d-flex justify-content-between align-items-end">
-            <div className="d-flex">
-                <img src={"/images/thumbnails/" + moviedata.thumbnail} alt="섬네일 이미지"/>
-                <div className="px-4">
-                    <div className="fx-2">{moviedata.title}</div>
-                    <div className="fx-n2 text-muted mt-2">
-                        <div className="mt-1">
-                            <span>출품일</span>
-                            <span className="ml-2">{created_at.toLocaleDateString()}</span>
-                        </div>
-                        <div className="mt-1">
-                            <span>조회수</span>
-                            <span className="ml-2">{moviedata.view.toLocaleString()}</span>
-                        </div>
-                        <div className="mt-1">
-                            <span>영상 길이</span>
-                            <span className="ml-2">{moviedata.duration}분</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button className="underline-btn fx-n2" onClick={() => router.replace('/movies/[id].js', '/movies/' + moviedata.idx)}>상세보기</button>
-            <style jsx>{`
-                img {
-                    width: 200px;
-                }
-            `}</style>
-        </div>
-    )
-}
-
-function Userinfo(props){
-    const {userdata} = props;
-
-    return (
-        <div className="d-flex align-items-center">
-            <img src={"/images/profiles/" + userdata.img} alt="프로필 이미지"/>
-            <div className="w-100 ml-4">
-                <div className="fx-2 font-weight-bold">{userdata.name}</div>
-                <div className="fx-n2 mt-1 text-muted">팔로워: {userdata.follows.toLocaleString()}</div>
-                <button className="underline-btn mt-3 fx-n2">팔로우</button>
-            </div>
-            <style jsx>{`
-                img {
-                    overflow: hidden;
-                    border-radius: 50%;
-                    border: 1px solid #ddd;
-                    flex: 0 0 100px;
-                    width: 100px;
-                    height: 100px;
-                    padding: 10px;
-                    object-fit: contain;
-                }
-            `}</style>
-        </div>
-    )
-}
 
 
 export default function DistributorInfo() {

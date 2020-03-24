@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {users, comments} from '../../public/json/data.json';
+import {users, comments} from '../../../public/json/data.json';
 
 
 function CommentForm(props){
