@@ -1,4 +1,4 @@
-import {videos, users, comments} from '../../public/json/data.json';
+import {videos, users} from '../../public/json/data.json';
 import {useRouter} from 'next/router';
 import Visual from '../../components/Visual';
 import Player from '../../components/movies/info/Player';

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, {useState, useEffect} from 'react';
+import LoginForm from '../components/sign-in/LoginForm';
 
 export default function Signin(){
 
@@ -11,29 +11,7 @@ export default function Signin(){
                         <div className="font-weight-bolder fx-5">로그인</div>
                         <div className="text-muted fx-n2 mt-3">부산국제영화제에 오신 것을 환영합니다!</div>
                     </div>
-                    <form className="mt-5">
-                        <div className="form-group">
-                            <div className="label">
-                                <label htmlFor="user_id" className="mb-0">아이디</label>
-                            </div>
-                            <div className="data">
-                                <input type="text" id="user_id" name="user_id"/>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="label">
-                                <label htmlFor="password" className="mb-0">비밀번호</label>
-                            </div>
-                            <div className="data">
-                                <input type="password" id="password" name="password" autoComplete="off" />
-                            </div>
-                        </div>
-                        <div className="form-group mt-5">
-                            <button className="fill-btn w-100 py-2">
-                                로그인
-                            </button>
-                        </div>
-                    </form>
+                    <LoginForm className='mt-3' />
                 </div>
             </div>
             <div className="right col-lg-6 d-lg-flex d-none">
@@ -87,34 +65,6 @@ export default function Signin(){
                     .right > div {
                         margin: 0 auto;
                     }
-                }
-
-                form {
-                    width: 100%;
-                    max-width: 480px;
-                }
-
-                .form-group {
-                    display: flex;
-                    align-items: center;
-                }
-
-                .label {
-                    width: 150px;
-                }
-
-                .data {
-                    width: calc(100% - 150px);
-                }
-
-                input, .profile-label {
-                    width: 100%;
-                    background-color: transparent;
-                    border: none;
-                    border-bottom: 1px solid #aaa;
-                    padding: 0.3em 0.8em;
-                    color: #555;
-                    outline: none;
                 }
             `}</style>
         </div>

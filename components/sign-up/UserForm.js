@@ -12,9 +12,9 @@ toast.configure({ draggable: true });
 
 export default function UserForm(props){
     const router = useRouter();
-    const createToast = function(title, message){
+    const createToast = function(title, message, background = "danger"){
         const toastInfo = {
-            className: "bg-danger text-white",
+            className: `bg-${background} text-white`,
             bodyClassName: "keep-all px-3 pt-2 pb-3",
             progressClassName: "bg-none bg-light",
             containerId: 'right'
@@ -25,7 +25,6 @@ export default function UserForm(props){
             <div className="mt-1 fx-n4">{message}</div>
         </>,
         toastInfo)
-        
     }
 
     /**
@@ -106,6 +105,7 @@ export default function UserForm(props){
             axios.post("/api/users", {userId, password, name, profile: profile.src})
             .then(({data}) => {
                 if(data.n === 1 && data.ok == 1) {
+                    createToast("회원가입 완료!", "이제부터 당신은 부산국제영화제의 회원입니다! 환영합니다!", "success");
                     router.replace('/sign-in');
                 }
                 else {

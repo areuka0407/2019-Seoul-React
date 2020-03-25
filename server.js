@@ -1,5 +1,8 @@
 const express = require('express')
 const next = require('next')
+const session = require('express-session');
+const DB = require('./src/DB');
+// const {createProxyMiddleware} = require('http-proxy-middleware');
 
 const port = parseInt(process.env.PORT, 10) || 80
 const dev = process.env.NODE_ENV !== 'production'
@@ -9,22 +12,20 @@ const handle = app.getRequestHandler()
 app.prepare().then(() => {
   const server = express()
 
-  server.get('/distributor', (req, res) => {
-    return app.render(req, res, '/distributor', req.query)
-  })
+  // middleware
+  const sessOption = {
+    secret: "qweSFDGFGJHWREQFDFHD",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: server.get('env') === 'production',
+      maxAge: 60000 * 60
+    }
+    
+  }
+  server.use(session(sessOption));
 
-  server.get('/movies/recommand', (req, res) => {
-    return app.render(req, res, '/movies/recommand', req.query)
-  })
-
-  server.get("/movies/upload", (req, res) => {
-    return app.render(req, res, "/movies/upload", req.query)
-  })
-
-  server.get("/mypage", (req, res) => {
-    return app.render(req, res, "/mypage", req.query)
-  })
-
+  // route
   server.all('*', (req, res) => {
     return handle(req, res)
   })

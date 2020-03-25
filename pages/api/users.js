@@ -29,7 +29,6 @@ function randomStr(length = 30){
  */
 function signUp(req, res){
     const { userId, password, name, profile } = req.body;
-
     const root = process.env.ROOT;
     const savePath = path.join(root, "public", "images", "profiles");
     
@@ -52,6 +51,8 @@ function signUp(req, res){
     // 패스워드 암호화
     let salt = Math.floor(new Date().getTime() * Math.random()) + "";
     let hashedPassword = crypto.createHash('sha512').update(password + salt).digest('hex');
+
+    console.log({password, salt, hashedPassword});
 
     //DB 삽입
     DB.insert(

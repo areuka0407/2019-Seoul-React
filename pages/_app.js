@@ -4,6 +4,7 @@ import React from 'react';
 import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 import {toast, ToastContainer} from 'react-toastify';
+import DB from '../src/DB';
 
 import 'react-toastify/dist/ReactToastify.css';
 import '../public/fontawesome/css/fontawesome.css';
@@ -15,6 +16,15 @@ import '../public/css/style.css';
 export default class MyApp extends App {
     constructor(props){
         super(props);
+    }
+
+    static async getInitialProps({Component, ctx}){
+        let pageProps = {};
+        if(Component.getInitialProps) pageProps = await Component.getInitialProps(ctx);
+        
+        return {
+            pageProps
+        }
     }
 
     render(){

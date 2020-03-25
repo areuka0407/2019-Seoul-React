@@ -10,6 +10,7 @@
     "axios": "^0.19.2",
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
+    "express-session": "^1.17.0",
     "mongodb": "^3.5.5",
     "next": "^9.3.1",
     "react": "^16.13.1",
@@ -21,5 +22,6 @@
     "build": "next build",
     "start": "cross-env NODE_ENV=production node server.js",
     "b-start": "next build && cross-env NODE_ENV=production node server.js"
-  }
+  },
+  "devDependencies": {}
 }
