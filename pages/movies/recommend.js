@@ -1,7 +1,7 @@
 import React from "react";
 
 
-export default class Recommand extends React.Component {
+export default class Recommend extends React.Component {
     constructor(props){
         super(props);
     }

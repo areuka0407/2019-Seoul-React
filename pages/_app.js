@@ -1,4 +1,5 @@
 import App from 'next/app';
+import Head from 'next/head';
 import React from 'react';
 import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
@@ -21,6 +22,10 @@ export default class MyApp extends App {
 
         return (
             <>
+                <Head>
+                    <title>부산국제영화제</title>
+                    <meta name="viewport" content="initial-scale=1.0, width=divice-width" />
+                </Head>
                 <Header />
                 <div id="wrapper">
                     <Component {...pageProps} />

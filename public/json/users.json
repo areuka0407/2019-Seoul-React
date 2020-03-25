@@ -1,0 +1,130 @@
+[
+    {
+        "idx": 1,
+        "id": "cjent",
+        "password": "cjent1234",
+        "name": "CJ엔터테인먼트",
+        "follows": 4899276,
+        "img": "profile1.png"
+    },
+    {
+        "idx": 2,
+        "id": "lotte",
+        "password": "lotte1234",
+        "name": "롯데엔터테인먼트",
+        "follows": 7832510,
+        "img": "profile2.png"
+    },
+    {
+        "idx": 3,
+        "id": "toho",
+        "password": "toho1234",
+        "name": "주식회사 도호",
+        "follows": 7098500,
+        "img": "profile3.png"
+    },
+    {
+        "idx": 4,
+        "id": "showbox",
+        "password": "showbox1234",
+        "name": "주식회사 쇼박스",
+        "follows": 9274465,
+        "img": "profile4.png"
+    },
+    {
+        "idx": 5,
+        "id": "disney",
+        "password": "disney1234",
+        "name": "월트 디즈니 스튜디오스",
+        "follows": 1620877,
+        "img": "profile5.png"
+    },
+    {
+        "idx": 6,
+        "id": "warner",
+        "password": "warner1234",
+        "name": "워너 브라더스 픽처스",
+        "follows": 7405838,
+        "img": "profile6.png"
+    },
+    {
+        "idx": 7,
+        "id": "univer",
+        "password": "univer1234",
+        "name": "유니버설 픽처스",
+        "follows": 6980819,
+        "img": "profile7.png"
+    },
+    {
+        "idx": 8,
+        "id": "paramo",
+        "password": "paramo1234",
+        "name": "파라마운트 픽처스",
+        "follows": 8498065,
+        "img": "profile8.png"
+    },
+    {
+        "idx": 9,
+        "id": "sony",
+        "password": "sony1234",
+        "name": "소니 픽처스",
+        "follows": 3001463,
+        "img": "profile9.png"
+    },
+    {
+        "idx": 10,
+        "id": "shochiku",
+        "password": "shochiku1234",
+        "name": "쇼치쿠",
+        "follows": 6127827,
+        "img": "profile10.png"
+    },
+    {
+        "idx": 11,
+        "id": "mgmua",
+        "password": "mgmua1234",
+        "name": "메트로 골드윈 메이어 유나이티드 아티스트",
+        "follows": 2749925,
+        "img": "profile11.png"
+    },
+    {
+        "idx": 12,
+        "id": "inlight",
+        "password": "inlight1234",
+        "name": "베이징 인라이트 픽쳐스",
+        "follows": 1985493,
+        "img": "profile12.png"
+    },
+    {
+        "idx": 13,
+        "id": "amblin",
+        "password": "amblin1234",
+        "name": "앰블린 파트너스",
+        "follows": 6397808,
+        "img": "profile13.png"
+    },
+    {
+        "idx": 14,
+        "id": "lions",
+        "password": "lions1234",
+        "name": "라이언스게이트",
+        "follows": 4634571,
+        "img": "profile14.png"
+    },
+    {
+        "idx": 15,
+        "id": "stxem",
+        "password": "stxem1234",
+        "name": "STX 엔터테인먼트",
+        "follows": 8336486,
+        "img": "profile15.png"
+    },
+    {
+        "idx": 16,
+        "id": "test",
+        "password": "test1234",
+        "name": "TEST 엔터테인먼트",
+        "follows": 0,
+        "img": "profile16.png"
+    }
+]
