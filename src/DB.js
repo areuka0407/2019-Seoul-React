@@ -44,7 +44,7 @@ module.exports = class DB {
         const [db, client] = await DB.__getConnection();
         const collection = db.collection(colName);
 
-        const ai = DB.find(DB.ai_collection, {name: colName});
+        const ai = (await DB.find(DB.ai_collection, {name: colName}))[0];
         
         const insert = new Promise(res => {
             collection.insertOne({idx: ai.value + 1, ...document}, (err, result) => {
@@ -57,6 +57,32 @@ module.exports = class DB {
         const updateAI = DB.update(
             DB.ai_collection, 
             {value: ai.value + 1}, 
+            {name: colName}
+        )
+        const [result] = await Promise.all([insert, updateAI]);
+        client.close();
+
+        return result;
+    }
+
+    static async insertAll(colName, docs){
+        const [db, client] = await DB.__getConnection();
+        const collection = db.collection(colName);
+
+        let {value} = DB.find(DB.ai_collection, {name: colName});
+        docs = docs.map(doc => ({idx: ++value, ...doc}));
+        
+        const insert = new Promise(res => {
+            collection.insertAll(docs, (err, result) => {
+                assert.equal(err, null);
+                assert.equal(result.result.n, docs.length);
+                res(result);
+            });
+        });
+
+        const updateAI = DB.update(
+            DB.ai_collection, 
+            {value}, 
             {name: colName}
         )
         const [result] = await Promise.all([insert, updateAI]);

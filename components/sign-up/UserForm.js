@@ -41,7 +41,7 @@ export default function UserForm(props){
      */
     const userIdHandler = e => setUserId(e.target.value.trim());
     const passwordHandler = e => setPassword(e.target.value.trim());
-    const nameHandler = e => setName(e.target.value.trim());
+    const nameHandler = e => setName(e.target.value);
     const profileHandler = e => {
         if(e.target.files.length === 0) return;
 

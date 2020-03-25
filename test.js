@@ -1,17 +1,18 @@
-// const DB = require('./src/DB');
+const DB = require('./src/DB');
+// const crypto = require('crypto');
 
-// DB.find("users", {'idx': 1}).then(async item => {
-//     const {id, password, name, follows, img} = item[0];
-//     const copy = {idx: 17, id, password, name, follows, img};
-//     const result = await DB.insert("users", copy).result;
-//     console.log(result);
+
+// DB.find("users")
+// .then(userList => {
+//     userList.forEach(user => {
+//         user.salt = Math.floor(new Date().getTime() * Math.random()) + "";
+//         user.password = crypto.createHash('sha512').update(user.password + user.salt).digest('hex');
+//         DB.update("users", user, {idx: user.idx});
+//     });
 // });
 
-// DB.update(
-//     "users", 
-//     { name: "기능반" },
-//     {idx : 17}
-// );
-
-
-// DB.delete("users", {idx: 17});
+DB.insert("users", {
+    name: "김민재",
+    password: "1234",
+    id: "125"
+})
