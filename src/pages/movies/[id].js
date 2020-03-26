@@ -1,11 +1,11 @@
-import {videos, users} from '../../public/json/data.json';
+import {videos, users} from '../../../public/json/data.json';
 import {useRouter} from 'next/router';
 import Visual from '../../components/Visual';
 import Player from '../../components/movies/info/Player';
 import CommentArea from '../../components/movies/info/Comment';
 import Userinfo from '../../components/movies/info/Userinfo';
 import Movieinfo from '../../components/movies/info/Movieinfo';
-import '../../helper';
+import '../../../helper';
 
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import {videos, users} from "../../public/json/data.json";
+import {videos, users} from "../../../public/json/data.json";
 
 function MovieItem(props){
     const {info} = props;

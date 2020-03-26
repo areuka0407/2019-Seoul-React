@@ -4,13 +4,12 @@ import React from 'react';
 import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 import {toast, ToastContainer} from 'react-toastify';
-import Axios from 'axios';
 
 import 'react-toastify/dist/ReactToastify.css';
-import '../public/fontawesome/css/fontawesome.css';
-import '../public/fontawesome/js/all.js'
-import '../public/bootstrap-4.4.1-dist/css/bootstrap.css';
-import '../public/css/style.css';
+import '../../public/fontawesome/css/fontawesome.css';
+import '../../public/fontawesome/js/all.js'
+import '../../public/bootstrap-4.4.1-dist/css/bootstrap.css';
+import '../../public/css/style.css';
 
 
 export default class MyApp extends App {
@@ -38,7 +37,7 @@ export default class MyApp extends App {
                     <title>부산국제영화제</title>
                     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 </Head>
-                <Heade />
+                <Header />
                 <div id="wrapper">
                     <Component {...pageProps} />
                     <Footer />

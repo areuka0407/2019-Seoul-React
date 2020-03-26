@@ -5,17 +5,12 @@ const session = require('express-session');
 require('./database');
 require('./passport');
 
+global.__ROOT = __dirname;
 
 const port = parseInt(process.env.PORT, 10) || 80
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
-
-
-// DB 연결
-const db = mongoose.connection;
-db.once("open", () => console.log("connect to DB"));
-db.on("error", err => console.log(`Error on DB connection: ${err}`));
 
 app.prepare().then(() => {
   const server = express()

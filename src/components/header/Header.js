@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {useRouter} from 'next/router';
 import Axios from "axios";
-import {createToast} from '../../helper';
+import {createToast} from '../../../helper';
 
 const NavItem = props => {
     const {url, text} = props;

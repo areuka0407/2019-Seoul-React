@@ -10,3 +10,8 @@ mongoose.connect(
     useUnifiedTopology: true 
   }
 )
+
+// DB 연결
+const db = mongoose.connection;
+db.once("open", () => console.log("connect to DB"));
+db.on("error", err => console.log(`Error on DB connection: ${err}`));
