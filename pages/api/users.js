@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import DB from '../../src/DB';
+import Users from '../../models/users';
 
 function randomStr(length = 30){
     const str = "qwertyuiopasdfghjklzxcvbnm1234567890";
@@ -18,9 +18,10 @@ function randomStr(length = 30){
  */
 
  function getUserById(req, res){
-    DB.find("users", {id: req.query.id}).then(user => {
-        res.status(200).json(user);
-    });
+    Users.findOne({id: req.query.id})
+        .then(user => {
+            res.status(200).json(user);
+        });
  }
 
 
@@ -52,22 +53,16 @@ function signUp(req, res){
     let salt = Math.floor(new Date().getTime() * Math.random()) + "";
     let hashedPassword = crypto.createHash('sha512').update(password + salt).digest('hex');
 
-    console.log({password, salt, hashedPassword});
-
     //DB 삽입
-    DB.insert(
-        "users", 
-        {
-            id: userId,
-            password: hashedPassword, 
-            salt,
-            name,
-            follows: 0,
-            img: filename + fileExt
-        }
-    )
-    .then(result => {
-        res.status(201).json(result);
+    const userInfo = { id: userId, password: hashedPassword,  salt, name, follows: 0, img: filename + fileExt };
+    Users.create(userInfo)
+    .then(err => {
+        if(err) res.status(400).json({result: false});
+        res.status(201).json({result: true});
+    })
+    .catch(err => {
+        console.log("insert user error : ", err);
+        res.status(400).json({result: true});
     });
 }
 

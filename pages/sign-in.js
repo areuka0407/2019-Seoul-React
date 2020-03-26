@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import LoginForm from '../components/sign-in/LoginForm';
 
-export default function Signin(){
-
+function Signin(props){
     return (
         <div className="row full-height overflow-hidden mx-0">
             <div className="left col-lg-6 col-sm-12">
@@ -70,3 +69,6 @@ export default function Signin(){
         </div>
     )
 }
+
+
+export default Signin;

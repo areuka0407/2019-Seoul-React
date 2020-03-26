@@ -1,48 +1,50 @@
-import {useState, useEffect} from 'react';
 import Link from "next/link";
 import {useRouter} from 'next/router';
 import Axios from "axios";
+import {createToast} from '../../helper';
 
 const NavItem = props => {
+    const {url, text} = props;
     const router = useRouter();
     return (
-        <Link href={props.url}>
-            <div className={"nav-item" + (router.pathname == props.url ? " active" : "")}>
-                <a>{props.text}</a>
+        <Link href={url}>
+            <div className={"nav-item" + (router.pathname == url ? " active" : "")}>
+                <a>{text}</a>
             </div>
         </Link>
     )
 }
 
 
-export default function Header(props){
-    const [isLogined, setisLogined] = useState(false);
+function Header(props){
+    const router = useRouter();
 
-
-    useEffect(() => {
-
-    }, []);
-
+    function handleLogout(){
+        Axios.delete("/api/sessions")
+        .then(({data}) => {
+            console.log("hadnleLogout response:" , data);
+            createToast("로그아웃!", "이용해주셔서 감사합니다.", "success");
+            router.replace("/");
+        });
+    }
 
     const navList = [
-        { text: "영화제 배급사", url: "/distributor" },
-        { text: "추천 영화", url: "/movies/recommend" },
-        { text: "예고편 업로드", url: "/movies/upload" },
-        { text: "내 동영상", url: "/mypage" }
+        <NavItem key='distributor' text={"영화제 배급사"} url={"/distributor"} />,
+        <NavItem key='recommend' text={"추천 영화"} url={"/movies/recommend"} />,
+        <NavItem key='upload' text={"예고편 업로드"} url={"/movies/upload"} />,
+        <NavItem key='mypage' text={"내 동영상"} url={"/mypage"} />
     ]
     const guestList = [
-        { text: "로그인", url: "/sign-in" },
-        { text: "회원가입", url: "/sign-up" }
+        <NavItem key='sign-in' text={"로그인"} url={"/sign-in"} />,
+        <NavItem key='sign-up' text={"회원가입"} url={"/sign-up"} />
     ]
     const userList = [
-        { text: "로그아웃", url: "/logout" }
+        <div key='logout' className="nav-item" onClick={handleLogout}>
+            <a>로그아웃</a>
+        </div>
     ]
 
-    let authList = isLogined;
-    if(isLogined) authList = userList.map(({text, url}) => <NavItem key={text} text={text} url={url} />);
-    else authList = guestList.map(({text, url}) => <NavItem key={text} text={text} url={url} />);
-        
-
+    let authList = false ? userList : guestList;
     return (
         <header>
             <div className="container-fluid h-100">
@@ -55,7 +57,7 @@ export default function Header(props){
                         </Link>
                     </div>
                     <div className="nav-list d-none d-lg-flex">
-                        {navList.map(({text, url}) => <NavItem key={text} text={text} url={url} />)}
+                        {navList}
                     </div>
                     <div className="nav-list d-none d-lg-flex">
                         {authList}
@@ -65,3 +67,4 @@ export default function Header(props){
         </header>
     )
 }
+export default Header;

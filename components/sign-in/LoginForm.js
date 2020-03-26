@@ -1,25 +1,11 @@
 import {useState, useEffect} from 'react';
 import Axios from 'axios';
-import {toast} from 'react-toastify';
+import {createToast} from '../../helper';
+import {useRouter} from 'next/router';
 
-toast.configure({draggable: true});
 
 export default function LoginForm(props){
-    const createToast = function(title, message, type = "danger"){
-        const toastInfo = {
-            className: `bg-${type} text-white`,
-            bodyClassName: "keep-all px-3 pt-2 pb-3",
-            progressClassName: "bg-none bg-light",
-            containerId: 'left'
-        }
-        toast(
-        <>
-            <div className="font-weight-bold">{title}</div>
-            <div className="mt-1 fx-n4">{message}</div>
-        </>,
-        toastInfo)
-    }
-
+    const router = useRouter();
     /**
      * useState
      */
@@ -41,6 +27,7 @@ export default function LoginForm(props){
                 createToast("로그인 오류!", data.message);
             }
             else {
+                router.replace('/');
                 createToast("로그인 성공!", data.message, data.type);
             }
         });

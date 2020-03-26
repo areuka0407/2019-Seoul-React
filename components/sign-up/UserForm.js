@@ -95,8 +95,8 @@ export default function UserForm(props){
             error++;
         }
 
-        let sameIdList = (await axios.get("/api/users?id=" + userId)).data
-        if(sameIdList.length > 0){
+        let sameId = (await axios.get("/api/users?id=" + userId)).data
+        if(sameId){
             createToast("중복된 아이디", "해당 아이디의 계정이 이미 존재합니다.");
             error++;
         }
@@ -104,7 +104,7 @@ export default function UserForm(props){
         if(error === 0){
             axios.post("/api/users", {userId, password, name, profile: profile.src})
             .then(({data}) => {
-                if(data.n === 1 && data.ok == 1) {
+                if(data.result) {
                     createToast("회원가입 완료!", "이제부터 당신은 부산국제영화제의 회원입니다! 환영합니다!", "success");
                     router.replace('/sign-in');
                 }
