@@ -39,6 +39,9 @@ function Header(props){
         <NavItem key='sign-up' text={"회원가입"} url={"/sign-up"} />
     ]
     const userList = [
+        <div key='user-info' className="nav-item">
+            <span className="fx-n2">{props.user ? props.user.name : ""}님 안녕하세요!</span>
+        </div>,
         <div key='logout' className="nav-item" onClick={handleClick}>
             <a>로그아웃</a>
         </div>

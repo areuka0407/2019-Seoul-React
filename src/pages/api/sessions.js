@@ -1,4 +1,4 @@
-import Users from '../../../models/users'
+import Users from '../../../models/user'
 
 async function isLogin(req, res){
     let uid = typeof req.session.uid !== 'undefined' ? req.session.uid : false;

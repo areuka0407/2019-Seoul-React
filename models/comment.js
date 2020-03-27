@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var passportLocalMongoose = require('passport-local-mongoose');
 mongoose.set('useCreateIndex', true);
 
 /**
@@ -14,33 +13,32 @@ var connection = mongoose.createConnection("mongodb://localhost:27017/biff2019",
 var autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(connection);
 
+
 /**
  * 스키마 설정
  */
-var userSchema = new mongoose.Schema({
+var commentSchema = new mongoose.Schema({
     idx: {type: Number, required: true, unique: true},
-    id: { type: String, required: true, unique: true, trim: true, lowercase: true },
-    name: { type: String, required: true },
-    follows: { type: Number, default: 0 },
-    img: { type: String, required: true },
+    comment: String,
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    date: Date,
+    video: {type: mongoose.Schema.Types.ObjectId, ref: 'Video'}
 });
-
 
 /**
  * 플러그인 설정
  */
 
 // auto-increment
-userSchema.plugin(autoIncrement.plugin, {
-    model: 'User',
+commentSchema.plugin(autoIncrement.plugin, {
+    model: 'Comment',
     field: 'idx',
-    startAt: 17,
+    startAt: 1,
     increment: 1
 });
 
-// passport
-userSchema.plugin(passportLocalMongoose, { usernameField: 'id' });
 
-var User = connection.model('user', userSchema);
+var Comment = connection.model('Comment', commentSchema);
+mongoose.model('Comment', commentSchema);
 
-module.exports = User;
+module.exports = Comment;

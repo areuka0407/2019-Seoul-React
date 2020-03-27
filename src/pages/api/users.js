@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import Users from '../../../models/users';
+import Users from '../../../models/user';
 
 function randomStr(length = 30){
     const str = "qwertyuiopasdfghjklzxcvbnm1234567890";

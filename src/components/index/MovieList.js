@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import {videos, users} from "../../../public/json/data.json";
+import Video from '../../../models/video';
 
 function MovieItem(props){
     const {info} = props;
@@ -97,10 +97,7 @@ export default class MovieList extends React.Component {
         this.state = {
             selected: null,
             showList: [],
-            videoList: videos.map(video => {
-                video.user = users.find(user => user.idx == video.users_id);
-                return video;
-            })
+            videoList: [],
         }
     }
 
