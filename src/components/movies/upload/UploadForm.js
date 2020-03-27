@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {toast} from 'react-toastify';
-import '../../../helper';
+import '../../../../helper';
 
 toast.configure({
     autoClose: false,

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import Link from 'next/link';
 import Visual from '../components/Visual';
-import {videos, users} from '../public/json/data.json';
-import '../helper';
+import {videos, users} from '../../public/json/data.json';
+import '../../helper';
 import Userinfo from '../components/mypage/Userinfo';
 import Videolist from '../components/mypage/Videolist';
 

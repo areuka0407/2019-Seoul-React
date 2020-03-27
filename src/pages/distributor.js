@@ -1,6 +1,6 @@
 import React from 'react';
 import Visual from '../components/Visual';
-import {videos, users} from '../public/json/data.json';
+import {videos, users} from '../../public/json/data.json';
 import Listitem from '../components/distributor/Listitem';
 
 
