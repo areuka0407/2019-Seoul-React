@@ -10,7 +10,7 @@ function Signin(props){
                         <div className="font-weight-bolder fx-5">로그인</div>
                         <div className="text-muted fx-n2 mt-3">부산국제영화제에 오신 것을 환영합니다!</div>
                     </div>
-                    <LoginForm className='mt-3' />
+                    <LoginForm className='mt-3' onLogin={props.onLogin} />
                 </div>
             </div>
             <div className="right col-lg-6 d-lg-flex d-none">

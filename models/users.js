@@ -20,11 +20,9 @@ autoIncrement.initialize(connection);
 var userSchema = new mongoose.Schema({
     idx: {type: Number, required: true, unique: true},
     id: { type: String, required: true, unique: true, trim: true, lowercase: true },
-    password: { type: String, required: true, trim: true },
     name: { type: String, required: true },
     follows: { type: Number, default: 0 },
     img: { type: String, required: true },
-    salt: { type: String, required: true, unique: true }
 });
 
 
@@ -41,7 +39,8 @@ userSchema.plugin(autoIncrement.plugin, {
 });
 
 // passport
-userSchema.plugin(passportLocalMongoose, { usernameField: 'name' });
+userSchema.plugin(passportLocalMongoose, { usernameField: 'id' });
 
 var User = connection.model('user', userSchema);
+
 module.exports = User;

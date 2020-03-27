@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
+import {useRouter} from 'next/router';
 import Axios from 'axios';
 import {createToast} from '../../../helper';
-import {useRouter} from 'next/router';
 
 
 export default function LoginForm(props){
@@ -18,9 +18,8 @@ export default function LoginForm(props){
 
     const userIdHandler = e => setUserId(e.target.value.trim());
     const passwordHandler = e => setPassword(e.target.value.trim());
-    const handleSubmit = e => {
+    const hadnleSubmit = e => {
         e.preventDefault();
-
         Axios.post("/api/sessions", {userId, password})
         .then(({data}) => {
             if(data.type === "danger"){ 
@@ -29,23 +28,13 @@ export default function LoginForm(props){
             else {
                 router.replace('/');
                 createToast("로그인 성공!", data.message, data.type);
+                props.onLogin(data.user);
             }
         });
-    };
-
-    /**
-     * effects
-     */
-    useEffect(() => {
-        const form = document.querySelector("#login-form");
-        form.addEventListener("submit", handleSubmit);
-        return () => {
-            form.removeEventListener("submit", handleSubmit);
-        }
-    }, [userId, password]);
+    }
 
     return (
-        <form id="login-form" className={props.className}>
+        <form id="login-form" className={props.className} onSubmit={hadnleSubmit}>
             <div className="form-group">
                 <div className="label">
                     <label htmlFor="user_id" className="mb-0">아이디</label>

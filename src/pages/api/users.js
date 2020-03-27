@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import crypto from 'crypto';
-import Users from '../../models/users';
+import Users from '../../../models/users';
 
 function randomStr(length = 30){
     const str = "qwertyuiopasdfghjklzxcvbnm1234567890";
@@ -49,20 +48,12 @@ function signUp(req, res){
     const saveName = path.join(savePath, filename + fileExt);
     fs.writeFileSync(saveName, profileData, 'base64');
 
-    // 패스워드 암호화
-    let salt = Math.floor(new Date().getTime() * Math.random()) + "";
-    let hashedPassword = crypto.createHash('sha512').update(password + salt).digest('hex');
 
     //DB 삽입
-    const userInfo = { id: userId, password: hashedPassword,  salt, name, follows: 0, img: filename + fileExt };
-    Users.create(userInfo)
-    .then(err => {
-        if(err) res.status(400).json({result: false});
-        res.status(201).json({result: true});
-    })
-    .catch(err => {
-        console.log("insert user error : ", err);
-        res.status(400).json({result: true});
+    const userInfo = { id: userId, name, follows: 0, img: filename + fileExt };
+    Users.register(new Users(userInfo), password, err => {
+        if(err) res.status(200).json({result: false});
+        else res.status(200).json({result: true});
     });
 }
 

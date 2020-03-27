@@ -19,12 +19,12 @@ const NavItem = props => {
 function Header(props){
     const router = useRouter();
 
-    function handleLogout(){
+    const handleClick = () => {
         Axios.delete("/api/sessions")
-        .then(({data}) => {
-            console.log("hadnleLogout response:" , data);
+        .then(() => {
             createToast("로그아웃!", "이용해주셔서 감사합니다.", "success");
             router.replace("/");
+            props.onLogout();
         });
     }
 
@@ -39,12 +39,12 @@ function Header(props){
         <NavItem key='sign-up' text={"회원가입"} url={"/sign-up"} />
     ]
     const userList = [
-        <div key='logout' className="nav-item" onClick={handleLogout}>
+        <div key='logout' className="nav-item" onClick={handleClick}>
             <a>로그아웃</a>
         </div>
     ]
 
-    let authList = false ? userList : guestList;
+    let authList = props.user ? userList : guestList;
     return (
         <header>
             <div className="container-fluid h-100">

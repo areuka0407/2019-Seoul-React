@@ -1,6 +1,7 @@
 const express = require('express')
 const next = require('next')
 const session = require('express-session');
+const passport = require('passport');
 
 require('./database');
 require('./passport');
@@ -15,6 +16,10 @@ const handle = app.getRequestHandler()
 app.prepare().then(() => {
   const server = express()
 
+  // passport 설정
+  server.use(passport.initialize());
+  server.use(passport.session());
+
   // 세션 설정
   const sessOption = {
     secret: "qweSFDGFGJHWREQFDFHD",
@@ -27,6 +32,7 @@ app.prepare().then(() => {
     
   }
   server.use(session(sessOption));
+  
 
   // route
   server.all('*', (req, res) => {
