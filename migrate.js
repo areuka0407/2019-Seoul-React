@@ -72,10 +72,9 @@ const Comment = require('./models/comment');
  }).then(() => {
     console.log("추천 데이터 삽입 완료!");
     return Promise.all(
-      view_history.map(async ({idx, video_idx, date, increase}) => {
+      view_history.map(async ({video_idx, date, increase}) => {
          const video = await Video.findOne({idx: video_idx});
-         video.view.fill(date, 0, increase);
-         await video.save();
+         await video.addView(increase, date);
       })
    )
  }).then(() => {

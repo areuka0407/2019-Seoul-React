@@ -27,10 +27,15 @@ var videoSchema = new mongoose.Schema({
     duration: Number,
     download: Number,
     allowed: Boolean,
-    view: [ Date ],
     recommends: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    comments: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ]
+    comments: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ],
+    view: [ 
+        new mongoose.Schema({
+            date: Date,
+            count: Number
+        }, { _id: false })
+    ],
 });
 
 videoSchema.methods.addComment = function(comment){
@@ -43,8 +48,18 @@ videoSchema.methods.addRecommend = function(user){
     return this.save();
 }
 
-videoSchema.methods.addView = function(){
-    this.view.push( new Date().getTime() );
+videoSchema.methods.addView = function(increase = 1, standard = new Date()){
+    if(standard instanceof Date == false) standard = new Date(standard);
+
+    let firstDay = new Date(standard.getFullYear(), standard.getMonth(), 1, 9, 0, 0, 0);
+    let idx = this.view.findIndex(v => v.date <= firstDay && v.date >= firstDay);
+
+    if(idx < 0){
+        this.view.push({ date: firstDay, count: increase });
+    }
+    else {
+        this.view[idx].count += increase;
+    }
     return this.save();
 }
 
