@@ -24,6 +24,7 @@ var userSchema = new mongoose.Schema({
     img: { type: String, required: true },
     videos: [ { type: mongoose.Schema.Types.ObjectId, ref: "Video" } ],
     following: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
+    follower: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
     recommends: [ { type: mongoose.Schema.Types.ObjectId, ref: "Video" } ]
 });
 
@@ -36,7 +37,9 @@ userSchema.methods.addVideo = function(video){
 // 팔로잉
 userSchema.methods.addFollow = function(user){
     this.following.push(user);
-    return this.save();
+    user.follower.push(this);
+
+    return Promise.all([this.save(), user.save()]);
 }
 
 // 추천
