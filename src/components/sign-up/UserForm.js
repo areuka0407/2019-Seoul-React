@@ -95,7 +95,7 @@ export default function UserForm(props){
             error++;
         }
 
-        let sameId = (await axios.get("/api/users?id=" + userId)).data
+        let sameId = (await axios.get("/api/users?id=" + userId)).data.user
         if(sameId){
             createToast("중복된 아이디", "해당 아이디의 계정이 이미 존재합니다.");
             error++;

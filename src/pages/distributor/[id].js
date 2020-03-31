@@ -1,15 +1,12 @@
-import {useRouter} from 'next/router';
 import Visual from '../../components/Visual';
-import {users, videos} from '../../public/json/data.json';
 import Movieinfo from '../../components/distributor/info/Movieinfo';
 import Userinfo from '../../components/distributor/info/Userinfo';
-import '../../helper';
+import '../../../helper';
+import Axios from 'axios';
 
-
-export default function DistributorInfo() {
-    const router = useRouter();
-    const user = router.query.id ? users.find(user => user.idx == router.query.id) : users[0];
-    const movieList = videos.filter(video => video.users_id == user.idx);
+function DistributorInfo(props) {
+    const {userInfo, movieList} = props;
+    console.log(userInfo);
     
     return (
         <div>
@@ -17,7 +14,7 @@ export default function DistributorInfo() {
             <div className="container padding">
                 <div className="row align-items-start">
                     <div className="col-sm-12 col-md-4">
-                        <Userinfo userdata={user} />
+                        <Userinfo userdata={userInfo} />
                     </div>
                     <div className="col-sm-12 col-md-8">
                         <div className="list-head w-100 d-flex justify-content-between align-items-center">
@@ -39,3 +36,16 @@ export default function DistributorInfo() {
         </div>
     )
 }
+
+DistributorInfo.getInitialProps = async function(ctx){
+    const userReq = await Axios.get("/api/users?id=" + ctx.query.id);
+    const videoReq = await Axios.get("/api/videos?user=" + ctx.query.id);
+
+    return {
+        userInfo: userReq.data.user,
+        movieList: videoReq.data.videoList,
+    }
+}
+
+
+export default DistributorInfo;

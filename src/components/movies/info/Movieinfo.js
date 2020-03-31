@@ -1,10 +1,25 @@
 import {useState} from 'react';
+import Axios from 'axios';
+
+
 
 
 export default function Movieinfo(props){
-    const {moviedata} = props;
-    const created_at = new Date(moviedata.date);
+    const [moviedata, setMoviedata] = useState(props.moviedata);
     const [hiddenDescription, setHiddenDescription] = useState(true);
+    const created_at = new Date(moviedata.date);
+
+    function handleRecommend(video_idx){
+        Axios.post("/api/recommends", {video_idx})
+        .then(res => {
+            let result = res.data.result;
+    
+            if(result){
+                let moviedata = JSON.parse(JSON.stringify(moviedata));
+                
+            }
+        });
+    }
 
     return (
         <div>
@@ -17,7 +32,7 @@ export default function Movieinfo(props){
                     <span>{`${created_at.toLocaleDateString()}`}</span>
                 </div>
                 <div>
-                    <button className="fx-n2 fill-btn">추천</button>
+                    <button className="fx-n2 fill-btn" onClick={() => handleRecommend(props.idx)}>추천</button>
                     <button className="fx-n2 fill-btn ml-2">다운로드</button>
                 </div>
             </div>

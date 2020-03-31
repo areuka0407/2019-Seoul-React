@@ -25,12 +25,29 @@ var videoSchema = new mongoose.Schema({
     video: String,
     thumbnail: String,
     duration: Number,
-    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    view: Number,
     download: Number,
     allowed: Boolean,
-    recommend: Number
+    view: [ Date ],
+    recommends: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    comments: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ]
 });
+
+videoSchema.methods.addComment = function(comment){
+    this.comments.push(comment);
+    return this.save();
+}
+
+videoSchema.methods.addRecommend = function(user){
+    this.recommends.push(user);
+    return this.save();
+}
+
+videoSchema.methods.addView = function(){
+    this.view.push( new Date().getTime() );
+    return this.save();
+}
+
 
 /**
  * 플러그인 설정
@@ -44,8 +61,12 @@ videoSchema.plugin(autoIncrement.plugin, {
     increment: 1
 });
 
+connection.model('Video', videoSchema);
 
-var Video = connection.model('Video', videoSchema);
-mongoose.model('Video', videoSchema);
+var Video;
+if(mongoose.models.Video) 
+    Video = mongoose.model("Video");
+else    
+    Video = mongoose.model('Video', videoSchema);
 
 module.exports = Video;

@@ -2,6 +2,7 @@
 export default function Userinfo(props){
     const {userdata} = props;
 
+
     return (
         <div className="d-flex align-items-center">
             <img src={"/images/profiles/" + userdata.img} alt="프로필 이미지"/>

@@ -35,6 +35,9 @@ app.prepare().then(() => {
   
 
   // route
+  let authRouter = require("./routes/auth");
+  server.use(authRouter);
+
   server.all('*', (req, res) => {
     return handle(req, res)
   })

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import Video from '../../../models/video';
+
+
 
 function MovieItem(props){
     const {info} = props;
@@ -96,25 +97,15 @@ export default class MovieList extends React.Component {
         
         this.state = {
             selected: null,
-            showList: [],
             videoList: [],
         }
     }
 
-    componentDidMount(){
-        const {videoList} = this.state;
-        const initialLength = 50;
-        const showList = [];
-        const startNo = parseInt(Math.random() * videoList.length - 1);
-        for(let i = 0; i < initialLength; i++){
-            showList.push( videoList[(startNo + i) % videoList.length] );
-        }
-        this.setState({showList});
-    }
-
 
     render(){
-        const {selected, showList} = this.state;
+        const {list} = this.props;
+        const {selected} = this.state;
+
         return (
         <div className="movie-info padding container">
             <div className="section-title text-center">
@@ -122,7 +113,7 @@ export default class MovieList extends React.Component {
                 <p className="mt-4 fx-n1 text-muted">부산국제영화제에서 최고의 영화를 만나보세요!</p>
             </div>
             <div className="row">
-                {showList.map((x, i) => <MovieItem key={i} info={x} selected={selected == x.idx} />)}
+                {list.map((x, i) => <MovieItem key={i} info={x} selected={selected == x.idx} />)}
             </div>
             <style jsx>{`
                 .section-title {

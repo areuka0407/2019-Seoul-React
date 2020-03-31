@@ -12,8 +12,8 @@ export default function ListItem(props){
                         <div className="z-index fx-2 mb-1 font-weight-bold">{info.name}</div>
                         <div>
                             <div className="z-index fx-n2 text-muted">
-                                <span className="mr-2">팔로워</span> 
-                                {info.follows.toLocaleString()} 명
+                                <span className="mr-2">내가 추천한 영상</span> 
+                                {videoList.length.toLocaleString()}개
                             </div>
                             <Link href={'/distributor/[id].js'} as={'/distributor/' + info.idx}>  
                                 <a className="mt-4 underline-btn fx-n2">바로가기</a>
@@ -22,11 +22,11 @@ export default function ListItem(props){
                     </div>
                 </div>
                 <div className="videos">
-                    <div className="title fx-1 font-weight-bold px-3">출품 목록</div>
+                    <div className="title fx-1 font-weight-bold px-3">영화 목록</div>
                     {
                         videoList.length > 0 ? 
                         videoList.map((video, idx) => <Videoitem key={idx} info={video} />) 
-                        : <div className="mt-2 px-3 fx-n2 text-muted">출품한 영화가 없습니다.</div>
+                        : <div className="mt-2 px-3 fx-n2 text-muted">내가 추천한 영화가 없습니다.</div>
                     }
                 </div>
             </div>

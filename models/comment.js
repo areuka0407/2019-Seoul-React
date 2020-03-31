@@ -22,7 +22,6 @@ var commentSchema = new mongoose.Schema({
     comment: String,
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     date: Date,
-    video: {type: mongoose.Schema.Types.ObjectId, ref: 'Video'}
 });
 
 /**
@@ -38,7 +37,11 @@ commentSchema.plugin(autoIncrement.plugin, {
 });
 
 
-var Comment = connection.model('Comment', commentSchema);
-mongoose.model('Comment', commentSchema);
+connection.model('Comment', commentSchema);
+let Comment;
+if(mongoose.models.Comment)
+    Comment = mongoose.model("Comment");
+else
+    Comment = mongoose.model('Comment', commentSchema);
 
 module.exports = Comment;

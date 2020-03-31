@@ -21,9 +21,29 @@ var userSchema = new mongoose.Schema({
     idx: {type: Number, required: true, unique: true},
     id: { type: String, required: true, unique: true, trim: true, lowercase: true },
     name: { type: String, required: true },
-    follows: { type: Number, default: 0 },
     img: { type: String, required: true },
+    videos: [ { type: mongoose.Schema.Types.ObjectId, ref: "Video" } ],
+    following: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
+    recommends: [ { type: mongoose.Schema.Types.ObjectId, ref: "Video" } ]
 });
+
+// 비디오 추가
+userSchema.methods.addVideo = function(video){
+    this.videos.push(video);
+    return this.save();
+}
+
+// 팔로잉
+userSchema.methods.addFollow = function(user){
+    this.following.push(user);
+    return this.save();
+}
+
+// 추천
+userSchema.methods.addRecommend = function(video){
+    this.recommends.push(video);
+    return this.save();
+}
 
 
 /**
@@ -40,8 +60,13 @@ userSchema.plugin(autoIncrement.plugin, {
 
 // passport
 userSchema.plugin(passportLocalMongoose, { usernameField: 'id' });
+connection.model('User', userSchema);
 
-var User = connection.model('User', userSchema);
-mongoose.model('User', userSchema);
+
+var User;
+if(mongoose.models.User) 
+    User = mongoose.model("User");
+else 
+    User = mongoose.model('User', userSchema);
 
 module.exports = User;

@@ -10,6 +10,8 @@ import '../../public/fontawesome/css/fontawesome.css';
 import '../../public/fontawesome/js/all.js'
 import '../../public/bootstrap-4.4.1-dist/css/bootstrap.css';
 import '../../public/css/style.css';
+import { createToast } from '../../helper';
+
 
 
 export default class MyApp extends App {
@@ -33,14 +35,26 @@ export default class MyApp extends App {
             user = ctx.req.session.user;
         }
 
+        // session 내에 message가 존재하면 이를 토스트 메세지로 띄워준다
+        let message = null;
+        if(ctx.req && ctx.req.session.message){
+            message = ctx.req.session.message;
+            delete ctx.req.session.message;
+        }
 
         return {
             user,
-            pageProps
+            pageProps,
+            message
         }
     }
 
     componentDidMount(){
+        const {message}= this.props;
+
+        if(message){
+            createToast(message.title, message.message);
+        }
         this.setState({user: this.props.user});
     }
 
@@ -56,9 +70,9 @@ export default class MyApp extends App {
 
     render(){
         const {Component, pageProps} = this.props;
-        const {user} = this.state;
-
+        const user = this.state.user || this.props.user;
         if(Component.name === "Signin") pageProps.onLogin = this.handleLogin;
+    
 
         return (
             <>
@@ -71,9 +85,7 @@ export default class MyApp extends App {
                     <Component user={user} {...pageProps} />
                     <Footer />
                 </div>
-                <ToastContainer enableMultiContainer containerId={'left'} position={toast.POSITION.TOP_LEFT} />
-                <ToastContainer enableMultiContainer containerId={'center'} position={toast.POSITION.BOTTOM_CENTER} />
-                <ToastContainer enableMultiContainer containerId={'right'} position={toast.POSITION.TOP_RIGHT} />
+                <ToastContainer enableMultiContainer position={toast.POSITION.TOP_LEFT} />
             </>
         )
     }

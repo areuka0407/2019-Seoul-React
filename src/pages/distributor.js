@@ -1,33 +1,44 @@
 import React from 'react';
 import Visual from '../components/Visual';
-import {videos, users} from '../../public/json/data.json';
 import Listitem from '../components/distributor/Listitem';
+import Axios from 'axios';
 
 
 export default class Distributor extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showList: [],
+            order: "follows/asc",
             activeIdx: null
         }
     }
 
-    componentDidMount(){
-        const showList = [1, 3, 16]; // 보여져야할 유저 목록
+    static async getInitialProps(ctx){
+        let userReq = await Axios.get("/api/users");
+        let videoReq = await Axios.get("/api/videos");
         
-        this.setState({
-            showList: showList.map(idx => {
-                let user = users.find(user => user.idx == idx);
-                user.videoList = videos.filter(video => video.users_id == idx).sort((a, b) => a.view - b.view).slice(0, 3);
-                return user;
-            }),
-            activeIdx: showList[0],
-        });
+        return {
+            userList: userReq.data.userList, 
+            videoList: videoReq.data.videoList
+        };
+    }
+
+    componentDidMount(){
+        this.setState({activeIdx: this.props.userList[0].idx})
+    }
+
+    changeHandle = (e) => {
+        this.setState({order: e.target.value});
     }
 
     render(){
-        const {showList, activeIdx} = this.state;
+        const {userList, videoList} = this.props;
+        const {order, activeIdx} = this.state;
+
+        let orderSplit = order.split("/");
+        let orderKey = orderSplit[0];
+        let orderArrow = orderSplit[1];
+
         return (
             <div>
                 <Visual mainTitle="Distributor List" subTitle="영화제 참여 기업 목록" src="/images/more_img_1.jpg" />
@@ -41,7 +52,7 @@ export default class Distributor extends React.Component {
                                 </div>
                                 <hr className="my-4" />
                                 <div>
-                                    <select id="order-by" className="form-control fx-n2" style={{"width": "200px"}}>
+                                    <select id="order-by" value={order} onChange={this.changeHandle} className="form-control fx-n2" style={{"width": "200px"}}>
                                         <option value="follows/asc">팔로워 수: 오름차순</option>
                                         <option value="follows/desc">팔로워 수: 내림차순</option>
                                         <option value="popular/asc">인기도: 오름차순</option>
@@ -51,7 +62,18 @@ export default class Distributor extends React.Component {
                             </div>
                         </div>
                         <div className="col-md-6 col-sm-12">
-                            {showList.map((x, i) => <Listitem key={i} info={x} active={activeIdx == x.idx} onClick={() => this.setState({activeIdx: x.idx})} />)}
+                            {   
+                                userList
+                                .sort((a, b) => orderArrow === "asc" ? a[orderKey] - b[orderKey] : b[orderKey] - a[orderKey])
+                                .map((user, i) => <Listitem 
+                                                        key={i} 
+                                                        info={user} 
+                                                        active={user.idx == activeIdx} 
+                                                        videoList={videoList.filter(video => video.user.idx === user.idx).slice(0, 3)}
+                                                        onClick={() => this.setState({activeIdx: user.idx})} 
+                                                    />
+                                                )   
+                            }
                         </div>
                     </div>
                     <style jsx>{`

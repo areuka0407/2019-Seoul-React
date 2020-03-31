@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import {users, comments} from '../../../../public/json/data.json';
 
-
 function CommentForm(props){
     const [value, setValue] = useState('');
 
@@ -89,11 +88,9 @@ function Comment(props){
 
 
 export default function CommentArea(props){
-    const moviedata = props.moviedata;
-    const commentList = comments
-    .filter(comment => comment.video_idx == moviedata.idx)
+    const {list} = props;
+    const commentList = list
     .map(comment => {
-        comment.user = users.find(user => user.idx == comment.user_idx);
         return <Comment key={comment.idx} data={comment} />;
     });
 

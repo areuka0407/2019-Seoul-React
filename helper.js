@@ -21,7 +21,6 @@ export function createToast(title, message, type = "danger"){
         className: `bg-${type} text-white`,
         bodyClassName: "keep-all px-3 pt-2 pb-3",
         progressClassName: "bg-none bg-light",
-        containerId: 'left'
     }
     toast(
     <>
