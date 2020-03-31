@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import {users, comments} from '../../../../public/json/data.json';
 
 function CommentForm(props){
     const [value, setValue] = useState('');
@@ -74,8 +73,7 @@ function Comment(props){
                     flex: 0 0 80px;
                     width: 80px;
                     height: 80px;
-                    padding: 10px;
-                    object-fit: contain;
+                    object-fit: cover;
                     border-radius: 50%;
                     overflow: hidden;
                     border: 1px solid #ddd;

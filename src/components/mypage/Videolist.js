@@ -4,6 +4,8 @@ function VideoItem(props){
     const {info} = props;
     const created_at = new Date(info.date);
 
+    let viewCount = info.view.reduce((prev, cur) => prev + cur.count, 0);
+
     return (
         <Link href={"/movies/[id].js"} as={"/movies/" + info.idx}>
             <div className="video-item d-flex align-items-center">
@@ -16,7 +18,7 @@ function VideoItem(props){
                         <span className="ml-2">상영 시간</span>
                         <span className="ml-1">{info.duration}분</span>
                         <span className="ml-2">조회수</span>
-                        <span className="ml-1">{info.view.toLocaleString()}</span>
+                        <span className="ml-1">{viewCount.toLocaleString()}</span>
                     </div>
                     <div className="description fx-n4 mt-3">{info.description}</div>
                 </div>

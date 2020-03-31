@@ -27,6 +27,7 @@ var videoSchema = new mongoose.Schema({
     duration: Number,
     download: Number,
     allowed: Boolean,
+    caption: String,
     recommends: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     comments: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ],
@@ -45,7 +46,8 @@ videoSchema.methods.addComment = function(comment){
 
 videoSchema.methods.addRecommend = function(user){
     this.recommends.push(user);
-    return this.save();
+    user.recommends.push(this);
+    return Promise.all([this.save(), user.save()]);
 }
 
 videoSchema.methods.addView = function(increase = 1, standard = new Date()){

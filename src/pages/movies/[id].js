@@ -7,7 +7,7 @@ import Movieinfo from '../../components/movies/info/Movieinfo';
 
 
 function Movie(props){
-    const {video, commentList} = props;
+    const {video} = props;
 
     return (
         <div>
@@ -29,7 +29,7 @@ function Movie(props){
                     </div>
                     <hr className="mx-3 my-4" />
                     <div className="px-3 mt-4">
-                        <CommentArea list={commentList} />
+                        <CommentArea list={video.comments} />
                     </div>
                 </div>
             </div>
@@ -39,12 +39,16 @@ function Movie(props){
 
 Movie.getInitialProps = async function(ctx){
     const Video = require('../../../models/video');
-    const Comment = require('../../../models/comment');
+    const video = await Video.findOne({idx: ctx.query.id})
+                        .populate('user')
+                        .populate({
+                            path: 'comments',
+                            populate: {
+                                path: 'user'
+                            }
+                        });
     
-    const video = await Video.findOne({idx: ctx.query.id}).populate('user');
-    const commentList = await Comment.find({video}).populate("user");
-    
-    return {video, commentList}
+    return {video}
 }
 
 export default Movie

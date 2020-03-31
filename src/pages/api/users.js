@@ -28,11 +28,24 @@ function getUserList(req, res){
  */
 
  function getUserById(req, res){
-    User.findOne({idx: req.query.id})
-        .then(user => {
+    User.findOne({id: req.query.id})
+        .populate("videos")
+        .exec((err, user) => {
             res.status(200).json({user});
         });
  }
+
+ /**
+  * 인덱스로 유저 가져오기
+  */
+
+  function getUserByIdx(req, res){
+    User.findOne({idx: req.query.idx})
+    .populate("videos")
+    .exec((err, user) => {
+        res.status(200).json({user});
+    });
+  }
 
 
 /**
@@ -61,9 +74,12 @@ function signUp(req, res){
 
 
     //DB 삽입
-    const userInfo = { id: userId, name, follows: 0, img: filename + fileExt };
+    const userInfo = { id: userId, name, follows: 0, img: filename + fileExt, videos: [], following: [], follower: [], recommends: [] };
     User.register(new User(userInfo), password, err => {
-        if(err) res.status(200).json({result: false});
+        if(err) {
+            res.status(200).json({result: false});
+            console.log("회원가입 도중 에러 발생!", err);
+        }
         else res.status(200).json({result: true});
     });
 }
@@ -72,6 +88,9 @@ export default (req, res) => {
     if(req.method === "GET"){
         if(typeof req.query.id !== 'undefined') {
             getUserById(req, res);
+        }
+        else if(typeof req.query.idx !== 'undefined'){
+            getUserByIdx(req, res);
         }
         else {
             getUserList(req, res);

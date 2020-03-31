@@ -64,8 +64,7 @@ const Comment = require('./models/comment');
       recommends.map(async ({user_idx, video_idx}) => {
          const user = await User.findOne({idx: user_idx});
          const video = await Video.findOne({idx: video_idx});
-  
-         await user.addRecommend(video);
+
          await video.addRecommend(user);
       })
    )

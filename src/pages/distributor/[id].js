@@ -38,7 +38,7 @@ function DistributorInfo(props) {
 }
 
 DistributorInfo.getInitialProps = async function(ctx){
-    const userReq = await Axios.get("/api/users?id=" + ctx.query.id);
+    const userReq = await Axios.get("/api/users?idx=" + ctx.query.id);
     const videoReq = await Axios.get("/api/videos?user=" + ctx.query.id);
 
     return {

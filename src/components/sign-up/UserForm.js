@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {toast} from 'react-toastify';
 import {useRouter} from 'next/router';
 import axios from 'axios';
+import {createToast} from '../../../helper';
 
 
 
@@ -12,20 +13,6 @@ toast.configure({ draggable: true });
 
 export default function UserForm(props){
     const router = useRouter();
-    const createToast = function(title, message, background = "danger"){
-        const toastInfo = {
-            className: `bg-${background} text-white`,
-            bodyClassName: "keep-all px-3 pt-2 pb-3",
-            progressClassName: "bg-none bg-light",
-            containerId: 'right'
-        }
-        toast(
-        <>
-            <div className="font-weight-bold">{title}</div>
-            <div className="mt-1 fx-n4">{message}</div>
-        </>,
-        toastInfo)
-    }
 
     /**
      * useState
@@ -95,7 +82,7 @@ export default function UserForm(props){
             error++;
         }
 
-        let sameId = (await axios.get("/api/users?id=" + userId)).data.user
+        let sameId = (await axios.get("/api/users?id=" + userId)).data.user;
         if(sameId){
             createToast("중복된 아이디", "해당 아이디의 계정이 이미 존재합니다.");
             error++;

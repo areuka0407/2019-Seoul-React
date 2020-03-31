@@ -8,7 +8,7 @@ export default class Distributor extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            order: "follows/asc",
+            order: "follower/desc",
             activeIdx: null
         }
     }
@@ -53,8 +53,8 @@ export default class Distributor extends React.Component {
                                 <hr className="my-4" />
                                 <div>
                                     <select id="order-by" value={order} onChange={this.changeHandle} className="form-control fx-n2" style={{"width": "200px"}}>
-                                        <option value="follows/asc">팔로워 수: 오름차순</option>
-                                        <option value="follows/desc">팔로워 수: 내림차순</option>
+                                        <option value="follower/asc">팔로워 수: 오름차순</option>
+                                        <option value="follower/desc">팔로워 수: 내림차순</option>
                                         <option value="popular/asc">인기도: 오름차순</option>
                                         <option value="popular/desc">인기도: 내림차순</option>
                                     </select>
@@ -64,7 +64,11 @@ export default class Distributor extends React.Component {
                         <div className="col-md-6 col-sm-12">
                             {   
                                 userList
-                                .sort((a, b) => orderArrow === "asc" ? a[orderKey] - b[orderKey] : b[orderKey] - a[orderKey])
+                                .sort((a, b) => {
+                                    if(orderKey === "follower"){
+                                        return orderArrow === "asc" ? a.follower.length - b.follower.length : b.follower.length - a.follower.length;
+                                    }
+                                })
                                 .map((user, i) => <Listitem 
                                                         key={i} 
                                                         info={user} 

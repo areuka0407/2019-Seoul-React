@@ -4,6 +4,7 @@ import User from '../../../models/user';
 function getVideo(req, res){
     Video.findOne({idx: req.query.id})
     .populate("user")
+    .populate("comments")
     .exec((err, video) => {
         if(err) 
             res.status(404).json({result: false, message: "데이터를 가져오지 못했습니다.."});

@@ -42,11 +42,6 @@ userSchema.methods.addFollow = function(user){
     return Promise.all([this.save(), user.save()]);
 }
 
-// 추천
-userSchema.methods.addRecommend = function(video){
-    this.recommends.push(video);
-    return this.save();
-}
 
 
 /**

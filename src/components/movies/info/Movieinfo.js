@@ -9,16 +9,10 @@ export default function Movieinfo(props){
     const [hiddenDescription, setHiddenDescription] = useState(true);
     const created_at = new Date(moviedata.date);
 
+    let viewCount = moviedata.view.reduce((prev, cur) => prev + cur.count, 0);
+
     function handleRecommend(video_idx){
-        Axios.post("/api/recommends", {video_idx})
-        .then(res => {
-            let result = res.data.result;
-    
-            if(result){
-                let moviedata = JSON.parse(JSON.stringify(moviedata));
-                
-            }
-        });
+        
     }
 
     return (
@@ -27,7 +21,7 @@ export default function Movieinfo(props){
             <div className="d-flex justify-content-between align-items-center">
                 <div className="fx-n2 text-muted mt-1">
                     <span>조회수 </span>
-                    <span>{moviedata.view.toLocaleString()}</span>
+                    <span>{viewCount.toLocaleString()}</span>
                     <span className="ml-2">출품일 </span>
                     <span>{`${created_at.toLocaleDateString()}`}</span>
                 </div>

@@ -5,6 +5,8 @@ export default function Movieinfo(props){
     const {moviedata} = props;
     const created_at = new Date(moviedata.date);
 
+    let viewCount = moviedata.view.reduce((prev, cur) => prev + cur.count, 0);
+
     return (
         <div className="w-100 py-3 d-flex justify-content-between align-items-end">
             <div className="d-flex">
@@ -18,7 +20,7 @@ export default function Movieinfo(props){
                         </div>
                         <div className="mt-1">
                             <span>조회수</span>
-                            <span className="ml-2">{moviedata.view.toLocaleString()}</span>
+                            <span className="ml-2">{viewCount.toLocaleString()}</span>
                         </div>
                         <div className="mt-1">
                             <span>영상 길이</span>

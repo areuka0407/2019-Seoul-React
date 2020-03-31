@@ -119,6 +119,9 @@ export default function Player(props){
         setMuted(false);
         setVolume(v);
     }
+    function handleEnded(e){
+        setPaused(true);
+    }
 
 
     /**
@@ -149,15 +152,20 @@ export default function Player(props){
 
     return (
         <div id="player">
-            <video onDoubleClick={() => setPaused(!paused)} src={"/video/" + video.video} onTimeUpdate={e => setCurrentTime(e.target.currentTime)}></video>
+            <video
+                onDoubleClick={() => setPaused(!paused)} 
+                src={"/video/" + video.video} 
+                onTimeUpdate={e => setCurrentTime(e.target.currentTime)}
+                onEnded={handleEnded}
+            />
             <div className="controls text-white">
                 <Timeline currentTime={currentTime} duration={video.duration} onTimeControl={handleTimecontrol} />
                 <div className="d-flex">
                     <button className={paused ? "d-block" : "d-none"} onClick={() => setPaused(false)}>
-                        <i className="fas fa-play"/>
+                        <i className="fas fa-play"></i>
                     </button>
                     <button className={paused ? "d-none" : "d-block"} onClick={() => setPaused(true)}>
-                        <i className="fas fa-pause"/>
+                        <i className="fas fa-pause"></i>
                     </button>
                     <button className="text-white" onClick={() => handleStop()}>
                         <i className="fas fa-stop"></i>

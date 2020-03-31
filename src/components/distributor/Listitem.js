@@ -11,9 +11,9 @@ export default function ListItem(props){
                     <div className="ml-4 h-100">
                         <div className="z-index fx-2 mb-1 font-weight-bold">{info.name}</div>
                         <div>
-                            <div className="z-index fx-n2 text-muted">
+                            <div className="z-index fx-n2 text-muted mt-2">
                                 <span className="mr-2">팔로워</span> 
-                                {info.follows.toLocaleString()} 명
+                                <span className="font-weight-bold">{info.follower.length.toLocaleString()}</span>
                             </div>
                             <Link href={'/distributor/[id].js'} as={'/distributor/' + info.idx}>  
                                 <a className="mt-4 underline-btn fx-n2">바로가기</a>

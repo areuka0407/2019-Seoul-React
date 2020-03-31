@@ -1,17 +1,28 @@
-import Users from '../../../models/user'
+import User from '../../../models/user'
 
 async function isLogin(req, res){
-    let uid = typeof req.session.uid !== 'undefined' ? req.session.uid : false;
-    let user = await Users.findOne({"idx": uid});
-    user = user ? user : false;
-
-    res.status(200).json(user);
+    
+    let user = typeof req.session.user !== 'undefined' ? req.session.user : false;
+    if(!user) res.status(200).json(false);
+    else {
+        user = await User
+        .findOne({_id: user._id})
+        .populate("following")
+        .populate("follower")
+        .populate({
+            path: "recommends",
+            populate: {
+                path: "user"
+            }
+        });
+        res.status(200).json(user);
+    }
 }
 
 async function signIn(req, res){
     const {userId, password} = req.body;
 
-    new Users({id: userId}).authenticate(password, (err, result) => {
+    new User({id: userId}).authenticate(password, (err, result) => {
         if(err || result == false) res.status(200).json({type: "danger", message: "입력 정보와 일치하는 회원을 찾을 수 없습니다."});
         else {
             req.session.user = result;

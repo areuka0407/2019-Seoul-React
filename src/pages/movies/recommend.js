@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Visual from "../../components/Visual";
 import Axios from 'axios';
 import {createToast} from '../../../helper';
@@ -7,8 +7,9 @@ import Listitem from "../../components/movies/recommend/Listitem"
 
 
 function Recommend(props){
-    let {user, recommendList, userList} = props;
+    let {user, userInfo} = props;
     const [active, setActive] = useState(null);
+    const [userList, setUserList] = useState([]);
 
     if(!user) {
         createToast("로그인이 필요합니다!", "이 페이지는 로그인을 필요로 합니다! 로그인 후 다시 시도하여 주시기 바랍니다.")
@@ -16,8 +17,22 @@ function Recommend(props){
         return <></>;
     }
 
-    userList = userList.filter(u => u.idx !== user.idx);
+    useEffect(() => {
+        Axios.get("/api/sessions")
+        .then(({data}) => {
+            if(data){
+                let list = data.recommends.map(rec => rec.user);
+                return Promise.all(
+                    list.map(user => Axios.get("/api/users?id=" + user.id))
+                )
+            }
+        }).then(results => {
+            let userList = results.map(result => result.data.user);
+            setUserList(userList);
+        });
+    }, []);
 
+    console.log(userList);
     return (
         <div>
             <Visual mainTitle="Recommend Movie List" subTitle="내가 추천한 영화 목록" src="/images/more_img_7.jpeg" />
@@ -39,11 +54,7 @@ function Recommend(props){
                                     key={user.idx}
                                     active={active === user.idx}
                                     info={user}
-                                    videoList={
-                                        recommendList
-                                            .filter(rec => rec.user.idx === user.idx)
-                                            .map(rec => rec.video)
-                                    }
+                                    videoList={user.videos}
                                     onClick={() => setActive(user.idx)}
                                 />    
                             )
@@ -56,18 +67,9 @@ function Recommend(props){
     )
 }
 
-Recommend.getInitialProps = async function(ctx){
-    let recReq = await Axios.get("/api/recommends?only-mine=true");
-    let recommendList = recReq.data.recommendList;
-
-    let userReq = await Axios.get("/api/users");
-    let userList = userReq.data.userList;
-
-    
-    return {
-        recommendList,
-        userList
-    }
+Recommend.getInitialProps = async function(){
+    let userInfo = Axios.get("/api/sessions");
+    return {userInfo};
 }
 
 export default Recommend;

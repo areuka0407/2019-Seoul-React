@@ -13,7 +13,7 @@ export default function VideoItem(props){
                         <span>상영 시간</span>
                         <span className="ml-1">{info.duration}분</span>
                         <span className="ml-2">조회수</span>
-                        <span className="ml-1">{info.view.toLocaleString()}</span>
+                        <span className="ml-1">{info.view.length.toLocaleString()}</span>
                     </div>
                     <div className="description fx-n4 mt-3">{info.description}</div>
                 </div>

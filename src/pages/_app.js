@@ -59,7 +59,6 @@ export default class MyApp extends App {
     }
 
     handleLogin = (user) => {
-        console.log(this);
         this.setState({user});
     }
 
