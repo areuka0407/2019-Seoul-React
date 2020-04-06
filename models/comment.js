@@ -36,8 +36,8 @@ commentSchema.plugin(autoIncrement.plugin, {
     increment: 1
 });
 
-
 connection.model('Comment', commentSchema);
+
 let Comment;
 if(mongoose.models.Comment)
     Comment = mongoose.model("Comment");

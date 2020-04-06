@@ -4,6 +4,13 @@ Date.prototype.toLocaleDateString = function(){
     return `${this.getFullYear()}년 ${this.getMonth() + 1}월 ${this.getDate()}일`;
 }
 
+String.prototype.toTime = function(){
+    let split = this.split(":");
+    let min = parseInt(split[0]);
+    let sec = parseFloat(split[1]);
+    return min + sec;
+}
+
 Number.prototype.sectotime = function(){
     let min = parseInt(this / 60);
     let sec = parseInt(this % 60);

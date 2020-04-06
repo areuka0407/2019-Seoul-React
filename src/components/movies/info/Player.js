@@ -1,10 +1,34 @@
 import {useState, useEffect} from 'react';
 import '../../../../helper';
 
+function CaptionLine(props){
+    const {hidden, caption} = props;
+    const _hidden = caption === undefined || hidden;
+
+    return <div className="caption-line">
+                <div className="text">{_hidden ? "" : props.caption.text}</div>
+                <style jsx>{`
+                    .caption-line {
+                        ${_hidden ? "display: none;" : ""}
+                        position: absolute;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        bottom: 10%;
+                        padding: 10px;
+                        background-color: #000a;
+                    }
+
+                    .text {
+                        color: #fff;
+                        font-size: 1.3em;
+                    }
+                `}</style>
+            </div>
+}
+
 
 function Timeline(props){
     const {currentTime, duration} = props;
-
     const [clicked, setClicked] = useState(false);
 
 
@@ -81,13 +105,16 @@ function Timeline(props){
 }
 
 export default function Player(props){
-    const {video} = props;
+    const {video, caption} = props;
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolume] = useState(0.5);
     const [muted, setMuted] = useState(false);
     const [paused, setPaused] = useState(true);
     const [showCaption, setShowCaption] = useState(false);
     const [isFullScreen, setIsFullScreen] = useState(false);
+    const [init, setInit] = useState(true);
+
+    let currentCaption = caption && caption.find(c => c.startTime <= currentTime && currentTime <= c.endTime);
 
 
     // handles
@@ -114,13 +141,19 @@ export default function Player(props){
         setPaused(true);
     }
     function handleChangeVolume(e){
-        const v = e.target.value / 100;
+        const target = e.nativeEvent.target;
+        const v = target.value / 100;
         document.querySelector("#player video").volume = v;
         setMuted(false);
         setVolume(v);
     }
     function handleEnded(e){
         setPaused(true);
+        setInit(true);
+    }
+    function handleTimeUpdate(e){
+        const target = e.nativeEvent.target;
+        setCurrentTime(target.currentTime);
     }
 
 
@@ -155,46 +188,53 @@ export default function Player(props){
             <video
                 onDoubleClick={() => setPaused(!paused)} 
                 src={"/video/" + video.video} 
-                onTimeUpdate={e => setCurrentTime(e.target.currentTime)}
+                onTimeUpdate={handleTimeUpdate}
                 onEnded={handleEnded}
             />
-            <div className="controls text-white">
-                <Timeline currentTime={currentTime} duration={video.duration} onTimeControl={handleTimecontrol} />
-                <div className="d-flex">
-                    <button className={paused ? "d-block" : "d-none"} onClick={() => setPaused(false)}>
+            <CaptionLine caption={currentCaption} hidden={!showCaption} />   
+            {
+                    init ?
+                    <button className={"init-play " + (paused ? "d-block" : "d-none")} onClick={() => setInit(false) || setPaused(false)}>
                         <i className="fas fa-play"></i>
                     </button>
-                    <button className={paused ? "d-none" : "d-block"} onClick={() => setPaused(true)}>
-                        <i className="fas fa-pause"></i>
-                    </button>
-                    <button className="text-white" onClick={() => handleStop()}>
-                        <i className="fas fa-stop"></i>
-                    </button>
-                    <span>
-                        {currentTime.sectotime()} / {video.duration.sectotime()}
-                    </span>
-                </div>
-                <div className="d-flex">
-                    <div className="d-flex align-items-center">
-                        <button className={volume >= 0.5 && !muted ? "d-block" : "d-none"} onClick={() => setMuted(true)}>
-                            <i className="fas fa-volume-up"></i>
+                    :<div className="controls text-white">
+                        <Timeline currentTime={currentTime} duration={video.duration} onTimeControl={handleTimecontrol} />
+                    <div className="d-flex">
+                        <button className={paused ? "d-block" : "d-none"} onClick={() => setPaused(false)}>
+                            <i className="fas fa-play"></i>
                         </button>
-                        <button className={volume < 0.5 && !muted ? "d-block" : "d-none"} onClick={() => setMuted(true)}>
-                            <i className="fas fa-volume-down"></i>
+                        <button className={paused ? "d-none" : "d-block"} onClick={() => setPaused(true)}>
+                            <i className="fas fa-pause"></i>
                         </button>
-                        <button className={muted ? "d-block" : "d-none"} onClick={() => setMuted(false)}>
-                            <i className="fas fa-volume-mute"></i>
+                        <button className="text-white" onClick={() => handleStop()}>
+                            <i className="fas fa-stop"></i>
                         </button>
-                        <input type="range" className="range" min="0" max="100" value={volume * 100} step="1" onChange={handleChangeVolume} />
+                        <span>
+                            {currentTime.sectotime()} / {video.duration.sectotime()}
+                        </span>
                     </div>
-                    <button className={isFullScreen ? "active" : ""} onClick={() => setIsFullScreen(!isFullScreen)}>
-                        <i className="fas fa-expand"></i>
-                    </button>
-                    <button className={showCaption ? "active" : ""} onClick={() => setShowCaption(!showCaption)}>
-                        <i className="fas fa-closed-captioning"></i>
-                    </button>
+                    <div className="d-flex">
+                        <div className="d-flex align-items-center">
+                            <button className={volume >= 0.5 && !muted ? "d-block" : "d-none"} onClick={() => setMuted(true)}>
+                                <i className="fas fa-volume-up"></i>
+                            </button>
+                            <button className={volume < 0.5 && !muted ? "d-block" : "d-none"} onClick={() => setMuted(true)}>
+                                <i className="fas fa-volume-down"></i>
+                            </button>
+                            <button className={muted ? "d-block" : "d-none"} onClick={() => setMuted(false)}>
+                                <i className="fas fa-volume-mute"></i>
+                            </button>
+                            <input type="range" className="range" min="0" max="100" value={volume * 100} step="1" onChange={handleChangeVolume} />
+                        </div>
+                        <button className={isFullScreen ? "active" : ""} onClick={() => setIsFullScreen(!isFullScreen)}>
+                            <i className="fas fa-expand"></i>
+                        </button>
+                        <button className={showCaption ? "active" : ""} onClick={() => setShowCaption(!showCaption)}>
+                            <i className="fas fa-closed-captioning"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            }
             <style jsx>{`
 
                 #player {
@@ -246,6 +286,17 @@ export default function Player(props){
                     line-height: 45px;
                     padding: 0 10px;
                     color: #ddd;
+                }
+
+
+                .init-play {
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    width: auto;
+                    height: auto;
+                    font-size: 5em;
+                    transform: translate(-50%, -50%);
                 }
             `}</style>
         </div>

@@ -26,12 +26,14 @@ const Comment = require('./models/comment');
       videos.map(async video => {
          let comments = [], view = [];
          let user = await User.findOne({idx: video.users_id});
+         let caption = video.caption ? video.caption : null;
 
+         delete video.caption;
          delete video.view;
          delete video.users_id;
          delete video.Recommend;
 
-         let new_video = new Video({user, view, comments, ...video});
+         let new_video = new Video({user, view, comments, caption, ...video});
          await user.addVideo(new_video);
          await new_video.save();
       })
