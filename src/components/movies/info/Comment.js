@@ -1,14 +1,38 @@
 import {useState} from 'react';
+import Axios from 'axios';
+import { createToast } from 'helper';
 
 function CommentForm(props){
+    const {vid, onSubmit} = props;
     const [value, setValue] = useState('');
 
     function handleChange(e){
         setValue(e.target.value);
     }
 
+    function handleSubmit(e){
+        e.preventDefault();
+        
+        Axios.post("/api/comments", {text: value, video_id: vid})
+        .then(res => {
+            let {comment, message} = res.data;
+
+            if(comment === null) {
+                createToast("댓글 작성 오류!", message);
+            }
+            else {
+                setValue("");
+                onSubmit(comment);
+                createToast("댓글 작성 완료!", "댓글이 무사히 작성되었습니다.", "success");
+            }
+        })
+        .catch(err => {
+            console.error("덧글 작성중 오류 발생.", err);
+        });
+    }
+
     return (
-        <form className={props.className}>
+        <form className={props.className} onSubmit={handleSubmit}>
             <input type="text" placeholder="공개 댓글 추가…" value={value} onChange={handleChange} />
             <div className="mt-3">
                 <button type="submit" className="fill-btn" disabled={value.length === 0 ? 'disabled' : ''}>댓글</button>
@@ -86,16 +110,21 @@ function Comment(props){
 
 
 export default function CommentArea(props){
-    const {list} = props;
-    const commentList = list
-    .map(comment => {
+    const {vid} = props;
+    const list = props.list.map(comment => {
         return <Comment key={comment.idx} data={comment} />;
     });
+    const [commentList, setCommentList] = useState(list);
+
+    function handleSubmit(item){
+        console.log(item);
+        setCommentList([...commentList, <Comment key={item.idx} data={item} />]);
+    }
 
     return (
         <div>
             <div>댓글 {commentList.length.toLocaleString()}개</div>
-            <CommentForm className="mt-3" />
+            <CommentForm vid={vid} className="mt-3" onSubmit={handleSubmit} />
             <div className="mt-4">
                 {commentList}
             </div>

@@ -31,7 +31,7 @@ function Movie(props){
                     </div>
                     <hr className="mx-3 my-4" />
                     <div className="px-3 mt-4">
-                        <CommentArea list={video.comments} />
+                        <CommentArea vid={video.idx} list={video.comments} />
                     </div>
                 </div>
             </div>
