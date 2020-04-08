@@ -7,7 +7,7 @@ function VideoItem(props){
     let viewCount = info.view.reduce((prev, cur) => prev + cur.count, 0);
 
     return (
-        <Link href={"/movies/[id].js"} as={"/movies/" + info.idx}>
+        <Link href={"/movies/setting/[id].js"} as={"/movies/setting/" + info.idx}>
             <div className="video-item d-flex align-items-center">
                 <img src={"/images/thumbnails/" + info.thumbnail} alt="섬네일 이미지" width="200" height="130" />
                 <div className="info h-100 pl-4 pr-2 py-3">
@@ -61,7 +61,7 @@ export default function Videolist(props){
 
     return (
         <>
-            <div className="title fx-2 px-3 mb-3">출품 목록</div>
+            <div className="title fx-2 px-3 mb-3">출품 목록 관리</div>
             <hr className="mx-3" />
             {
                 list.length > 0 ? 

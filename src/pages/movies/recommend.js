@@ -7,7 +7,7 @@ import Listitem from "../../components/movies/recommend/Listitem"
 
 
 function Recommend(props){
-    let {user, userInfo} = props;
+    let {user} = props;
     const [active, setActive] = useState(null);
     const [userList, setUserList] = useState([]);
 
@@ -65,11 +65,6 @@ function Recommend(props){
             </div>               
         </div>
     )
-}
-
-Recommend.getInitialProps = async function(){
-    let userInfo = Axios.get("/api/sessions");
-    return {userInfo};
 }
 
 export default Recommend;

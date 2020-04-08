@@ -84,7 +84,6 @@ export default class MyApp extends App {
                     <Component user={user} {...pageProps} />
                     <Footer />
                 </div>
-                <ToastContainer enableMultiContainer position={toast.POSITION.TOP_LEFT} />
             </>
         )
     }

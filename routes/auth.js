@@ -29,6 +29,7 @@ function checkGuest(req, res, next){
  */
 router.get("/mypage", checkUser);
 router.get("/movies/recommend", checkUser);
+router.get("/movies/setting/[id]", checkUser)
 
 
 /**
