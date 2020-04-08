@@ -129,6 +129,7 @@ ol, ul { list-style: none; }
     appearance: none;
     -webkit-appearance: none;
     width: 5px;
+    height: 5px;
     background-color: #ddd;
     border-radius: 2.5px;
 }

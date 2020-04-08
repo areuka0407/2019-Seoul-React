@@ -105,7 +105,7 @@ function Timeline(props){
 }
 
 export default function Player(props){
-    const {video, caption} = props;
+    const {video, caption, height} = props;
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolume] = useState(0.5);
     const [muted, setMuted] = useState(false);
@@ -239,7 +239,7 @@ export default function Player(props){
 
                 #player {
                     width: 100%;
-                    height: 600px;
+                    height: ${height ? height + "px" : "600px"};
                     position: relative;
                     background-color: #000;
                     overflow: hidden;

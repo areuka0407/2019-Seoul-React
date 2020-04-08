@@ -1,5 +1,9 @@
 import {toast} from 'react-toastify';
 
+Date.prototype.toLocaleYMString = function(){
+    return `${this.getFullYear()}년 ${this.getMonth() + 1}월`;
+}
+
 Date.prototype.toLocaleDateString = function(){
     return `${this.getFullYear()}년 ${this.getMonth() + 1}월 ${this.getDate()}일`;
 }

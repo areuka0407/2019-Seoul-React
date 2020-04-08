@@ -20,6 +20,10 @@ export default function Info(props){
     }
 
     return  <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <p className="fx-3 font-weight-bold mb-2">상세정보 수정</p>
+                    <p className="fx-n1 text-muted">해당 영상의 정보를 수정해 보세요!</p>
+                </div>       
                 <div className="form-group">
                     <label className="fx-n2" htmlFor="movie_title">영상 제목</label>
                     <input type="text" id="movie_title" name="title" value={title} onChange={handleTitle} />

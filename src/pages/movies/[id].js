@@ -55,7 +55,6 @@ Movie.getInitialProps = async function(ctx){
     if(video.caption !== null){
         let req = await Axios.get("/caption/" + video.caption);
         caption = req.data;
-        console.log("start", caption);
         let list = [];
         let regex = /(?<startTime>[0-9]{2}:[0-9]{2}.[0-9]{2}) ~ (?<endTime>[0-9]{2}:[0-9]{2}.[0-9]{2})\r\n(?<text>.+)/;
         while(regex.test(caption)){
