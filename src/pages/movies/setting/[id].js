@@ -4,12 +4,13 @@ import Editor from '../../../components/movies/setting/Editor';
 import Replies from '../../../components/movies/setting/Replies';
 import {createToast} from '../../../../helper';
 import {useRouter} from 'next/router';
-import {useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Axios from 'axios';
 
 function Setting(props){
     const router = useRouter();
-    const {user, caption, page, movie} = props;
+    const [page, setPage] = useState('info');
+    const {user, caption, movie} = props;
 
     const pageList = {
         'info': <Info movie={movie} />,
@@ -36,28 +37,28 @@ function Setting(props){
                     <div className="col-sm-12 col-md-3">
                         <div className="fx-3 font-weight-bold pl-3 mb-3">메뉴</div>
                         <div className="menu-list">
-                            <div className={"menu-item" + (page == 'info' ? " active" : "")} onClick={() => router.push('/movies/setting/[id]?p=info', '/movies/setting/'+movie.idx+'?p=info')}>
+                            <div className={"menu-item" + (page == 'info' ? " active" : "")} onClick={() => setPage('info')}>
                                 <span>정보 수정</span>
                                 <div className="arrow">
                                     <span></span>
                                     <span></span>
                                 </div>
                             </div>
-                            <div className={"menu-item" + (page == 'detail' ? " active" : "")} onClick={() => router.push('/movies/setting/[id]?p=detail', '/movies/setting/'+movie.idx+'?p=detail')}>
+                            <div className={"menu-item" + (page == 'detail' ? " active" : "")} onClick={() => setPage('detail')}>
                                 <span>조회수 분석</span>
                                 <div className="arrow">
                                     <span></span>
                                     <span></span>
                                 </div>
                             </div>
-                            <div className={"menu-item" + (page == 'editor' ? " active" : "")} onClick={() => router.push('/movies/setting/[id]?p=editor', '/movies/setting/'+movie.idx+'?p=editor')}>
+                            <div className={"menu-item" + (page == 'editor' ? " active" : "")} onClick={() => setPage('editor')}>
                                 <span>자막 편집기</span>
                                 <div className="arrow">
                                     <span></span>
                                     <span></span>
                                 </div>
                             </div>
-                            <div className={"menu-item" + (page == 'replies' ? " active" : "")} onClick={() => router.push('/movies/setting/[id]?p=replies', '/movies/setting/'+movie.idx+'?p=replies')}>
+                            <div className={"menu-item" + (page == 'replies' ? " active" : "")} onClick={() => setPage('replies')}>
                                 <span>댓글 관리</span>
                                 <div className="arrow">
                                     <span></span>
@@ -133,15 +134,6 @@ function Setting(props){
 }
 
 Setting.getInitialProps = async function(ctx){
-    // 옵션 페이지 선택
-    let page;
-    let pageList = ["info", "detail", "editor", "replies"]
-    if(typeof ctx.query.p === 'undefined' || !pageList.includes(ctx.query.p)){
-        page = "info";
-    } else {
-        page = ctx.query.p;
-    }
-
     // 영화 정보 불러오기
     let req = await Axios.get("/api/videos?id=" + ctx.query.id);
     let movie = req.data.video;
@@ -162,7 +154,7 @@ Setting.getInitialProps = async function(ctx){
         caption = list.map(item => ({startTime:  item.startTime.toTime(), endTime: item.endTime.toTime(), text: item.text}));        
     }
 
-    return {page, movie, caption};
+    return {movie, caption};
 }
 
 
