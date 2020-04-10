@@ -22,91 +22,107 @@ function captureImage({soruce, timestamp}){
 
 
 export default function Editor(props){
-    const {movie, caption} = props;
+    const {movie, caption, onLoadStart, onLoadEnd} = props;
     const video = useRef(null);
+    const voiceCanvas = useRef(null);
     const [imageArr, setImageArr] = useState([]);
     const captureLength = 10;
 
+
+    const handleClickImage = e => video.current.currentTime = parseFloat(e.target.alt);
+
     useEffect(() => {
+        onLoadStart();
 
         // 이미지 추출
-        const captures = {
-            from: 1,
-            to: captureLength,
-
-            [Symbol.asyncIterator](){
-                return {
-                    current: this.from,
-                    last: this.to,
-
-                    async next(){
-                        if(this.current <= this.last){
-                            
-                            let video = await new Promise(res => {
-                                let _video = document.createElement("video");
-                                _video.src = "/video/" + movie.video;
+        let loadCaptureImage = async () => {
+            const captures = {
+                from: 1,
+                to: captureLength,
     
-                                _video.onloadedmetadata = () =>{
-                                    _video.currentTime = _video.duration * this.current++ / this.last;
-                                }
-                                _video.onseeked = () => res(_video);
-                            });
-
-                            let image = await new Promise(res => {
-                                let canvas = document.createElement('canvas');
-                                canvas.width = 600
-                                canvas.height = 350
-
-                                let ctx = canvas.getContext('2d');
-                                ctx.drawImage(video, 0, 0, 600, 350);
-
-                                let src = canvas.toDataURL("image/jpeg");
-                                res(
-                                    <img
-                                        className="w-100" 
-                                        key={video.currentTime} 
-                                        src={src} 
-                                        alt="캡쳐 이미지" 
-                                        data-time={video.currentTime}
-                                    />
-                                );
-                            });
-
-                            return {done: false, value: image}
-                        }
-                        else {
-                            return {done: true}
+                [Symbol.asyncIterator](){
+                    return {
+                        current: this.from,
+                        last: this.to,
+    
+                        async next(){
+                            if(this.current <= this.last){
+                                
+                                let video = await new Promise(res => {
+                                    let _video = document.createElement("video");
+                                    _video.src = "/video/" + movie.video;
+        
+                                    _video.onloadedmetadata = () =>{
+                                        _video.currentTime = _video.duration * this.current++ / this.last;
+                                    }
+                                    _video.onseeked = () => res(_video);
+                                });
+    
+                                let image = await new Promise(res => {
+                                    let canvas = document.createElement('canvas');
+                                    canvas.width = 600
+                                    canvas.height = 350
+    
+                                    let ctx = canvas.getContext('2d');
+                                    ctx.drawImage(video, 0, 0, 600, 350);
+    
+                                    let src = canvas.toDataURL("image/jpeg");
+                                    res(
+                                        {
+                                            className: "pointer" ,
+                                            key: video.currentTime ,
+                                            src,
+                                            alt: video.currentTime,
+                                            onClick: handleClickImage,
+                                        }
+                                    );
+                                });
+    
+                                return {done: false, value: image}
+                            }
+                            else {
+                                return {done: true}
+                            }
                         }
                     }
                 }
             }
-        }
-
-
-        let loadCaptureImage = async () => {
             let imageArr = [];
             for await (let img of captures){
                 imageArr.push(img)
             }
             setImageArr(imageArr);
         }
-        loadCaptureImage();
-        
-        
-
+    
         // 오디오 추출
+        let loadVoiceData = () => new Promise(res => {
+            let actx = new AudioContext();
 
-        // let actx = new AudioContext();
-        // fetch(video.current.src)
-        // .then(res => res.arrayBuffer())
-        // .then(blob => actx.decodeAudioData(blob))
-        // .then(audioData => {
-        //     let channel = audioData.getChannelData(0);
-        // });
+            fetch("/video/" + movie.video)
+            .then(res => res.arrayBuffer())
+            .then(buffer => actx.decodeAudioData(buffer))
+            .then(decodedData => {
+                let audioBuffer = decodedData.getChannelData(0);
+                let soundWorker = new Worker("/js/workers/sound-capture.js");
+                
+                let offscreen = voiceCanvas.current.transferControlToOffscreen();
 
-        // let soundWorker = new Worker("/js/workers/sound-capture.js");
-        // soundWorker.postMessage({src: video.current.src});
+                soundWorker.postMessage({buffer: audioBuffer, canvas: offscreen}, [offscreen]);
+                soundWorker.onmessage = (e) => {
+                    let {resolve} = e.data;
+                    if(resolve){
+                        res();
+                    }
+                }
+            });
+        });
 
+
+        Promise.all([loadCaptureImage(), loadVoiceData()])
+        .then(() => {
+            console.log("완료");
+            onLoadEnd();
+        });
 
     }, []);
 
@@ -121,21 +137,23 @@ export default function Editor(props){
                             <video ref={video} src={"/video/" + movie.video} />
                         </div>
                     </div>
-                    <div className="col-sm-12 col-md-3 h-100">
+                    <div className="col-sm-12 col-md-3 h-md-100">
                         <div className="capture-line custom-scrollbar">
-                            {
-                                imageArr
-                            }
+                            <div className="d-flex flex-md-column hx-sm-100">
+                                {
+                                    imageArr.map(imgProps => <img {...imgProps} />)
+                                }
+                            </div>
                         </div>
                     </div>
-                    <div className="col-12">
+                    <div className="col-12 mt-4">
                         <div className="voice-line">
-
+                            <canvas ref={voiceCanvas} width="750" height="100"></canvas>
                         </div>
                     </div>
-                    <div className="col-12">
+                    <div className="col-12 mt-4">
                         <div className="input-line">
-
+                            
                         </div>
                     </div>
                 </div>
@@ -156,14 +174,28 @@ export default function Editor(props){
 
 
                     .capture-line {
-                        height: 350px;
-                        overflow-x: hidden;
-                        overflow-y: auto;
+                        width: 100%;
+                        max-height: 350px;
+                        overflow: auto;
                         background-color: #ddd;
                     }
 
                     .capture-line img {
+                        flex: 0 0 100px;
+                        max-height: 100px;
+                    }
+
+                    .voice-line {
+                        position: relative;
                         width: 100%;
+                        height: 100px;
+                        background-color: #ddd;
+                    }
+
+                    .voice-line canvas {
+                        position: absolute;
+                        width: 100%;
+                        height: 100px;
                     }
                 `}</style>
             </div>

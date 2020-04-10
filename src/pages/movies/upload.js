@@ -1,7 +1,22 @@
 import Visual from '../../components/Visual';
 import UploadForm from '../../components/movies/upload/UploadForm';
+import {createToast} from '../../../helper';
+import {useRouter} from 'next/router';
+import { useEffect } from 'react';
 
-export default function Upload(){
+export default function Upload(props){
+    const router = useRouter();
+    const user = props.user;
+
+    useEffect(() => {
+        if(!user) {
+            createToast("로그인이 필요합니다!", "이 페이지는 로그인을 필요로 합니다! 로그인 후 다시 시도하여 주시기 바랍니다.")
+            router.replace("/sign-in");
+            return <></>;
+        }
+    }, [])
+    
+
     return (
         <>
             <Visual 

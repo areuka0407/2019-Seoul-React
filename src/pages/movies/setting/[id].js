@@ -10,12 +10,13 @@ import Axios from 'axios';
 function Setting(props){
     const router = useRouter();
     const [page, setPage] = useState('info');
+    const [loading, setLoading] = useState(false);
     const {user, caption, movie} = props;
 
     const pageList = {
         'info': <Info movie={movie} />,
         'detail': <Detail movie={movie} />,
-        'editor': <Editor movie={movie} caption={caption} />,
+        'editor': <Editor movie={movie} caption={caption} onLoadStart={() => setLoading(true)} onLoadEnd={() => setLoading(false)} />,
         'replies': <Replies movie={movie} />
     }
 
@@ -32,43 +33,52 @@ function Setting(props){
 
     
 
-    return  <div className="container full-height padding">
-                <div className="row">
-                    <div className="col-sm-12 col-md-3">
-                        <div className="fx-3 font-weight-bold pl-3 mb-3">메뉴</div>
-                        <div className="menu-list">
-                            <div className={"menu-item" + (page == 'info' ? " active" : "")} onClick={() => setPage('info')}>
-                                <span>정보 수정</span>
-                                <div className="arrow">
-                                    <span></span>
-                                    <span></span>
+    return  <>
+                {
+                    loading ?
+                    <div className="loading d-flex justify-content-center align-items-center">
+                        <i className="fas fa-spinner fa-spin fa-4x text-white"></i>
+                    </div>
+                    : <></>
+                }
+                <div className="container full-height padding">
+                    <div className="row">
+                        <div className="col-sm-12 col-md-3">
+                            <div className="fx-3 font-weight-bold pl-3 mb-3">메뉴</div>
+                            <div className="menu-list">
+                                <div className={"menu-item" + (page == 'info' ? " active" : "")} onClick={() => setPage('info')}>
+                                    <span>정보 수정</span>
+                                    <div className="arrow">
+                                        <span></span>
+                                        <span></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={"menu-item" + (page == 'detail' ? " active" : "")} onClick={() => setPage('detail')}>
-                                <span>조회수 분석</span>
-                                <div className="arrow">
-                                    <span></span>
-                                    <span></span>
+                                <div className={"menu-item" + (page == 'detail' ? " active" : "")} onClick={() => setPage('detail')}>
+                                    <span>조회수 분석</span>
+                                    <div className="arrow">
+                                        <span></span>
+                                        <span></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={"menu-item" + (page == 'editor' ? " active" : "")} onClick={() => setPage('editor')}>
-                                <span>자막 편집기</span>
-                                <div className="arrow">
-                                    <span></span>
-                                    <span></span>
+                                <div className={"menu-item" + (page == 'editor' ? " active" : "")} onClick={() => setPage('editor')}>
+                                    <span>자막 편집기</span>
+                                    <div className="arrow">
+                                        <span></span>
+                                        <span></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={"menu-item" + (page == 'replies' ? " active" : "")} onClick={() => setPage('replies')}>
-                                <span>댓글 관리</span>
-                                <div className="arrow">
-                                    <span></span>
-                                    <span></span>
+                                <div className={"menu-item" + (page == 'replies' ? " active" : "")} onClick={() => setPage('replies')}>
+                                    <span>댓글 관리</span>
+                                    <div className="arrow">
+                                        <span></span>
+                                        <span></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-sm-12 col-md-9 mt-5 mt-md-0">
-                        {pageList[page]}
+                        <div className="col-sm-12 col-md-9 mt-5 mt-md-0">
+                            {pageList[page]}
+                        </div>
                     </div>
                 </div>
                 <style jsx>{`
@@ -129,8 +139,17 @@ function Setting(props){
                         width: 1px;
                     }
 
+                    .loading {
+                        position: fixed;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 101;
+                        background-color: #0008;
+                    }
                 `}</style>
-            </div>
+            </>
 }
 
 Setting.getInitialProps = async function(ctx){
