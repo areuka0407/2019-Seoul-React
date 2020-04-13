@@ -199,41 +199,41 @@ export default function Player(props){
                     </button>
                     :<div className="controls text-white">
                         <Timeline currentTime={currentTime} duration={video.duration} onTimeControl={handleTimecontrol} />
-                    <div className="d-flex">
-                        <button className={paused ? "d-block" : "d-none"} onClick={() => setPaused(false)}>
-                            <i className="fas fa-play"></i>
-                        </button>
-                        <button className={paused ? "d-none" : "d-block"} onClick={() => setPaused(true)}>
-                            <i className="fas fa-pause"></i>
-                        </button>
-                        <button className="text-white" onClick={() => handleStop()}>
-                            <i className="fas fa-stop"></i>
-                        </button>
-                        <span>
-                            {currentTime.sectotime()} / {video.duration.sectotime()}
-                        </span>
-                    </div>
-                    <div className="d-flex">
-                        <div className="d-flex align-items-center">
-                            <button className={volume >= 0.5 && !muted ? "d-block" : "d-none"} onClick={() => setMuted(true)}>
-                                <i className="fas fa-volume-up"></i>
+                        <div className="d-flex">
+                            <button className={paused ? "d-block" : "d-none"} onClick={() => setPaused(false)}>
+                                <i className="fas fa-play"></i>
                             </button>
-                            <button className={volume < 0.5 && !muted ? "d-block" : "d-none"} onClick={() => setMuted(true)}>
-                                <i className="fas fa-volume-down"></i>
+                            <button className={paused ? "d-none" : "d-block"} onClick={() => setPaused(true)}>
+                                <i className="fas fa-pause"></i>
                             </button>
-                            <button className={muted ? "d-block" : "d-none"} onClick={() => setMuted(false)}>
-                                <i className="fas fa-volume-mute"></i>
+                            <button className="text-white" onClick={() => handleStop()}>
+                                <i className="fas fa-stop"></i>
                             </button>
-                            <input type="range" className="range" min="0" max="100" value={volume * 100} step="1" onChange={handleChangeVolume} />
+                            <span>
+                                {currentTime.sectotime()} / {video.duration.sectotime()}
+                            </span>
                         </div>
-                        <button className={isFullScreen ? "active" : ""} onClick={() => setIsFullScreen(!isFullScreen)}>
-                            <i className="fas fa-expand"></i>
-                        </button>
-                        <button className={showCaption ? "active" : ""} onClick={() => setShowCaption(!showCaption)}>
-                            <i className="fas fa-closed-captioning"></i>
-                        </button>
+                        <div className="d-flex">
+                            <div className="d-flex align-items-center">
+                                <button className={volume >= 0.5 && !muted ? "d-block" : "d-none"} onClick={() => setMuted(true)}>
+                                    <i className="fas fa-volume-up"></i>
+                                </button>
+                                <button className={volume < 0.5 && !muted ? "d-block" : "d-none"} onClick={() => setMuted(true)}>
+                                    <i className="fas fa-volume-down"></i>
+                                </button>
+                                <button className={muted ? "d-block" : "d-none"} onClick={() => setMuted(false)}>
+                                    <i className="fas fa-volume-mute"></i>
+                                </button>
+                                <input type="range" className="range" min="0" max="100" value={volume * 100} step="1" onChange={handleChangeVolume} />
+                            </div>
+                            <button className={isFullScreen ? "active" : ""} onClick={() => setIsFullScreen(!isFullScreen)}>
+                                <i className="fas fa-expand"></i>
+                            </button>
+                            <button className={showCaption ? "active" : ""} onClick={() => setShowCaption(!showCaption)}>
+                                <i className="fas fa-closed-captioning"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
             }
             <style jsx>{`
 

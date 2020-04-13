@@ -4,6 +4,8 @@ onmessage = e => {
     let {buffer, canvas} = e.data;
     let {width, height} = canvas;
     let ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#eee";
+    ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = "#3A93D2";
 
     // 한 픽셀당 포함 될 데이터의 양

@@ -10,13 +10,13 @@ import Axios from 'axios';
 function Setting(props){
     const router = useRouter();
     const [page, setPage] = useState('info');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(page === 'editor');
     const {user, caption, movie} = props;
 
     const pageList = {
         'info': <Info movie={movie} />,
         'detail': <Detail movie={movie} />,
-        'editor': <Editor movie={movie} caption={caption} onLoadStart={() => setLoading(true)} onLoadEnd={() => setLoading(false)} />,
+        'editor': <Editor movie={movie} caption={caption} onLoadEnd={() => setLoading(false)} />,
         'replies': <Replies movie={movie} />
     }
 
@@ -60,7 +60,7 @@ function Setting(props){
                                         <span></span>
                                     </div>
                                 </div>
-                                <div className={"menu-item" + (page == 'editor' ? " active" : "")} onClick={() => setPage('editor')}>
+                                <div className={"menu-item" + (page == 'editor' ? " active" : "")} onClick={() => {setPage('editor'); setLoading(true);}}>
                                     <span>자막 편집기</span>
                                     <div className="arrow">
                                         <span></span>
@@ -160,7 +160,7 @@ Setting.getInitialProps = async function(ctx){
     // 자막 정보 불러오기
     let caption = [];
     if(movie.caption !== null){
-        let req = await Axios.get("/caption/" + video.caption);
+        let req = await Axios.get("/caption/" + movie.caption);
         caption = req.data;
         let list = [];
         let regex = /(?<startTime>[0-9]{2}:[0-9]{2}.[0-9]{2}) ~ (?<endTime>[0-9]{2}:[0-9]{2}.[0-9]{2})\r\n(?<text>.+)/;

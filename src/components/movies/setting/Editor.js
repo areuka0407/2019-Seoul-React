@@ -1,39 +1,51 @@
 import {useEffect, useRef, useState} from 'react';
-
-function captureImage({soruce, timestamp}){
-    return new Promise((res, rej) => {
-        let canvas = document.createElement("canvas");
-        let ctx = canvas.getContext("2d");
-
-        let copy = document.createElement("video");
-        document.body.append(copy);
-        copy.addEventListener("loadedmetadata", () =>{
-            copy.currentTime = timestamp ? timestamp : 0;
-        });
-        copy.addEventListener("seeked", () => {
-            ctx.drawImage(video, 0, 0);
-            let url = canvas.toDataURL("image/jpeg");
-            let image = <img src={url} key={timestamp ? timestamp : new Date().getTime()} />
-            res(image);
-        });
-        copy.src = soruce;
-    });
-}
+import Form from './Editor/Form';
+import Video from './Editor/Video';
+import CaptionLine from './Editor/CaptionLine';
+import {createToast} from '../../../../helper';
 
 
 export default function Editor(props){
-    const {movie, caption, onLoadStart, onLoadEnd} = props;
+    const {movie, onLoadEnd} = props;
     const video = useRef(null);
     const voiceCanvas = useRef(null);
     const [imageArr, setImageArr] = useState([]);
+    const [captionTarget, setCaptionTarget] = useState(null);
+    const [caption, setCaption] = useState((props.caption ? props.caption : []));
     const captureLength = 10;
 
 
     const handleClickImage = e => video.current.currentTime = parseFloat(e.target.alt);
+    const handlePushCaption = ({startTime, endTime, text}) => {
+        const _caption = JSON.parse(JSON.stringify(caption));
+
+        if(text.trim().length == 0){
+            createToast("자막 텍스트 오류!", "빈 자막은 삽입할 수 없습니다. 자막을 입력해 주세요.")
+        } else if (endTime <= startTime){
+            createToast("자막 시간 오류!", "자막의 시작시간은 종료시간보다 빨라야 합니다.")
+        } else if(_caption.find(x => x.startTime <= endTime && startTime <= x.endTime)){
+            createToast("자막 시간 오류!", "해당 시각에는 이미 자막이 존재하여 더 이상 추가할 수 없습니다.")
+        } else {
+            let newCaption = { startTime, endTime, text }
+            _caption.push(newCaption);
+            setCaption(_caption);
+        }
+    }
+
+    const changeTarget = ({startTime, endTime, text}) => {
+        const _target = captionTarget;
+        
+        if(_target === null){
+            setCaptionTarget({startTime, endTime, text});
+        } else {
+            _target.startTime = startTime;
+            _target.endTime = endTime;
+            _target.text = text;
+            setCaptionTarget(_target);
+        }
+    }
 
     useEffect(() => {
-        onLoadStart();
-
         // 이미지 추출
         let loadCaptureImage = async () => {
             const captures = {
@@ -120,7 +132,6 @@ export default function Editor(props){
 
         Promise.all([loadCaptureImage(), loadVoiceData()])
         .then(() => {
-            console.log("완료");
             onLoadEnd();
         });
 
@@ -133,9 +144,7 @@ export default function Editor(props){
                 </div>       
                 <div className="row video-line">
                     <div className="col-sm-12 col-md-9">
-                        <div className="video">
-                            <video ref={video} src={"/video/" + movie.video} />
-                        </div>
+                        <Video _ref={video} movie={movie} caption={caption} />
                     </div>
                     <div className="col-sm-12 col-md-3 h-md-100">
                         <div className="capture-line custom-scrollbar">
@@ -147,32 +156,23 @@ export default function Editor(props){
                         </div>
                     </div>
                     <div className="col-12 mt-4">
-                        <div className="voice-line">
-                            <canvas ref={voiceCanvas} width="750" height="100"></canvas>
+                        <div className="voice-line w-100">
+                            <canvas ref={voiceCanvas} className="w-100" width="750" height="50"></canvas>
                         </div>
                     </div>
                     <div className="col-12 mt-4">
-                        <div className="input-line">
-                            
-                        </div>
+                        <CaptionLine caption={caption} />
+                    </div>
+                    <div className="col-12 mt-4">
+                        <Form 
+                            video={video} 
+                            target={captionTarget} 
+                            onPushCaption={handlePushCaption} 
+                            onChangeTarget={changeTarget}
+                        />
                     </div>
                 </div>
                 <style jsx>{`
-                    .video {
-                        position: relative;
-                        width: 100%;
-                        height: 350px;
-                        overflow: hidden;
-                    }
-
-                    video {
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        background-color: #000;
-                    }
-
-
                     .capture-line {
                         width: 100%;
                         max-height: 350px;
@@ -183,19 +183,6 @@ export default function Editor(props){
                     .capture-line img {
                         flex: 0 0 100px;
                         max-height: 100px;
-                    }
-
-                    .voice-line {
-                        position: relative;
-                        width: 100%;
-                        height: 100px;
-                        background-color: #ddd;
-                    }
-
-                    .voice-line canvas {
-                        position: absolute;
-                        width: 100%;
-                        height: 100px;
                     }
                 `}</style>
             </div>
