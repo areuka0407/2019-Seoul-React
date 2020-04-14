@@ -158,19 +158,26 @@ Setting.getInitialProps = async function(ctx){
     let movie = req.data.video;
 
     // 자막 정보 불러오기
-    let caption = [];
+    let caption = {
+        list : [],
+        length: 0,
+    }
     if(movie.caption !== null){
         let req = await Axios.get("/caption/" + movie.caption);
-        caption = req.data;
-        let list = [];
+        let data = req.data;
+
         let regex = /(?<startTime>[0-9]{2}:[0-9]{2}.[0-9]{2}) ~ (?<endTime>[0-9]{2}:[0-9]{2}.[0-9]{2})\r\n(?<text>.+)/;
-        while(regex.test(caption)){
-            let matches = regex.exec(caption);
-            let idx = caption.indexOf(matches[0]);
-            caption = caption.substr(idx + matches[0].length);
-            list.push(matches.groups);
+        while(regex.test(data)){
+            let matches = regex.exec(data);
+            let idx = data.indexOf(matches[0]);
+            data = data.substr(idx + matches[0].length);
+            caption.list.push({
+                idx: caption.length++, 
+                startTime:  matches.groups.startTime.toTime(),
+                endTime: matches.groups.endTime.toTime(),
+                text: matches.groups.text
+            });
         }
-        caption = list.map(item => ({startTime:  item.startTime.toTime(), endTime: item.endTime.toTime(), text: item.text}));        
     }
 
     return {movie, caption};

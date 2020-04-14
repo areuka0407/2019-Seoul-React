@@ -1,27 +1,14 @@
-import {useState} from 'react';
-import {createToast} from "../../../../../helper";
-
 export default function Form(props){
-    const {video, onPushCaption, onChangeTarget} = props;
-
-    const [text, setText] = useState('');
-    const [startTime, setStartTime] = useState(0);
-    const [endTime, setEndTime] = useState(0);
-
-    const handleChangeText = e => {
-        setText(e.target.value);
-        onChangeTarget({text: e.target.value, startTime, endTime});
-    };
-
-    const handleChangeStartTime = value => {
-        setStartTime(value);
-        onChangeTarget({startTime: value, endTime, text})
-    }
-
-    const handleChangeEndTime = value => {
-        setEndTime(value);
-        onChangeTarget({endTime: value, startTime, text});
-    };
+    const {
+        video, 
+        text,
+        startTime,
+        endTime,
+        onPushCaption, 
+        onPopCaption,
+        onChangeStartTime, 
+        onChangeEndTime, 
+        onChangeText} = props;
 
     return  <>
                 <div className="input-line d-flex flex-wrap align-items-start">
@@ -30,7 +17,7 @@ export default function Form(props){
                         <input 
                             type="text" 
                             value={text} 
-                            onChange={handleChangeText} 
+                            onChange={onChangeText} 
                         />
                     </div>
                     <div className="col-sm-12 col-md-3 form-group">
@@ -40,12 +27,12 @@ export default function Form(props){
                                 type="number" 
                                 value={startTime} 
                                 min="0" 
-                                onChange={e => handleChangeStartTime(e.target.value)} 
+                                onChange={e => onChangeStartTime(e.target.value)} 
                                 step="0.5" 
                             />
                             <button 
-                                className="fill-btn" 
-                                onClick={() => handleChangeStartTime( video.current.currentTime.toFixed(2) )}
+                                className="fill-btn clock" 
+                                onClick={() => onChangeStartTime( video.current.currentTime.toFixed(2) )}
                             >
                                 <i className="far fa-clock"></i>
                             </button>
@@ -58,27 +45,31 @@ export default function Form(props){
                                 type="number" 
                                 value={endTime} 
                                 min="0" 
-                                onChange={e => handleChangeEndTime(e.target.value)} 
+                                onChange={e => onChangeEndTime(e.target.value)} 
                             />
                             <button 
-                                className="fill-btn" 
-                                onClick={() => handleChangeEndTime( video.current.currentTime.toFixed(2) )}
+                                className="fill-btn clock" 
+                                onClick={() => onChangeEndTime( video.current.currentTime.toFixed(2) )}
                             >
                                 <i className="far fa-clock"></i>
                             </button>
                         </div>
                     </div>
                     <div className="col-md-12 mt-4">
-                        <div className="d-flex">
-                            <button 
-                                className="underline-btn mr-3" 
-                                onClick={() => onPushCaption({startTime, endTime, text})}
-                            >
-                                적용하기
-                            </button>
-                            <button className="underline-btn">
-                                결정하기
-                            </button>
+                        <div className="d-flex justify-content-between">
+                            <div>
+                                <button className="underline-btn mr-3" onClick={onPushCaption}>
+                                    적용하기
+                                </button>
+                                <button className="underline-btn mr-3" onClick={onPopCaption}>
+                                    삭제하기
+                                </button>
+                            </div>
+                            <div>
+                                <button className="fill-btn">
+                                    저장하기
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -93,7 +84,7 @@ export default function Form(props){
                         width: calc(100% - 40px);
                     }
 
-                    .fill-btn {
+                    .clock {
                         width: 40px;
                         height: 40px;
                     }

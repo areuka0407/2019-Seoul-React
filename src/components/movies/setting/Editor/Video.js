@@ -2,26 +2,20 @@ import {useState, useEffect} from 'react';
 import '../../../../../helper';
 
 export default function Video(props){
-    const {movie, _ref, caption} = props;
-    const [currentTime, setCurrentTime] = useState(0);
+    const {movie, _ref, caption, currentTime, onChangeTime} = props;
     const [paused, setPaused] = useState(true);
 
-    const currentCaption = caption.find(c => c.startTime <= currentTime && currentTime <= c.endTime);
+    const currentCaption = caption.list.find(c => c.startTime <= currentTime && currentTime <= c.endTime);
 
     useEffect(() => {
         paused ? _ref.current.pause() : _ref.current.play();
     }, [paused]);
 
-    const handleChangeTime = e => {
-        setCurrentTime(parseInt(e.target.value)); 
-        _ref.current.currentTime = parseInt(e.target.value);
-    }
-
     return <div className="video">
                 <video 
                     ref={_ref} 
                     src={"/video/" + movie.video} 
-                    onTimeUpdate={e => setCurrentTime(e.target.currentTime)}
+                    onTimeUpdate={e => onChangeTime(e.target.currentTime, false)}
                 />
                 {
                     currentCaption &&
@@ -47,10 +41,11 @@ export default function Video(props){
                         type="range" 
                         className="range mx-3 w-100" 
                         value={currentTime} 
-                        onChange={handleChangeTime} 
+                        min="0"
+                        max={movie.duration}
+                        onChange={e => onChangeTime(e.target.value)} 
                     />
                 </div>
-                
                 <style jsx>{`
                     .video {
                         position: relative;

@@ -10,7 +10,7 @@ Date.prototype.toLocaleDateString = function(){
 
 String.prototype.toTime = function(){
     let split = this.split(":");
-    let min = parseInt(split[0]);
+    let min = parseInt(split[0]) * 60;
     let sec = parseFloat(split[1]);
     return min + sec;
 }
@@ -22,6 +22,16 @@ Number.prototype.sectotime = function(){
     if(min < 10) min = "0" + min;
     if(sec < 10) sec = "0" + sec;
     return `${min}:${sec}`;
+}
+
+Number.prototype.sectodetailtime = function(){
+    let min = parseInt(this / 60);
+    let sec = parseInt(this % 60);
+    let ms = parseFloat(this - (min * 60) - sec).toFixed(2).substr(-2);
+    
+    if(min < 10) min = "0" + min;
+    if(sec < 10) sec = "0" + sec;
+    return `${min}:${sec}.${ms}`;
 }
 
 

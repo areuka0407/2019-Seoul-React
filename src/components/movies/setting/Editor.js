@@ -3,6 +3,7 @@ import Form from './Editor/Form';
 import Video from './Editor/Video';
 import CaptionLine from './Editor/CaptionLine';
 import {createToast} from '../../../../helper';
+import Axios from 'axios';
 
 
 export default function Editor(props){
@@ -10,40 +11,72 @@ export default function Editor(props){
     const video = useRef(null);
     const voiceCanvas = useRef(null);
     const [imageArr, setImageArr] = useState([]);
-    const [captionTarget, setCaptionTarget] = useState(null);
-    const [caption, setCaption] = useState((props.caption ? props.caption : []));
+    const [target, setTarget] = useState(null);
+    const [caption, setCaption] = useState(props.caption);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [text, setText] = useState('');
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
     const captureLength = 10;
 
+    // handle
 
-    const handleClickImage = e => video.current.currentTime = parseFloat(e.target.alt);
-    const handlePushCaption = ({startTime, endTime, text}) => {
+    const handleChangeText = e => setText(e.target.value);
+
+    const handleChangeStartTime = value => setStartTime(parseFloat(value));
+
+    const handleChangeEndTime = value => setEndTime(parseFloat(value));
+
+    const handlePushCaption = () => {
         const _caption = JSON.parse(JSON.stringify(caption));
 
         if(text.trim().length == 0){
             createToast("자막 텍스트 오류!", "빈 자막은 삽입할 수 없습니다. 자막을 입력해 주세요.")
         } else if (endTime <= startTime){
             createToast("자막 시간 오류!", "자막의 시작시간은 종료시간보다 빨라야 합니다.")
-        } else if(_caption.find(x => x.startTime <= endTime && startTime <= x.endTime)){
+        } else if(target === null && _caption.list.find(x => x.startTime <= endTime && startTime <= x.endTime)){
             createToast("자막 시간 오류!", "해당 시각에는 이미 자막이 존재하여 더 이상 추가할 수 없습니다.")
         } else {
-            let newCaption = { startTime, endTime, text }
-            _caption.push(newCaption);
+            if(target){
+                let item = _caption.list.find(x => x.idx === target);
+                item.startTime = startTime;
+                item.endTime = endTime;
+                item.text = text;
+            } else {
+                let newCaption = { idx: _caption.length++, startTime, endTime, text }
+                _caption.list.push(newCaption);
+            }
+            console.log(_caption);
             setCaption(_caption);
+            setTarget(null);
         }
     }
 
-    const changeTarget = ({startTime, endTime, text}) => {
-        const _target = captionTarget;
-        
-        if(_target === null){
-            setCaptionTarget({startTime, endTime, text});
-        } else {
-            _target.startTime = startTime;
-            _target.endTime = endTime;
-            _target.text = text;
-            setCaptionTarget(_target);
+    const handlePopCaption = () => {
+        if(!confirm("정말로 이 자막을 삭제하시겠습니까?")) return;
+        let _caption = JSON.parse(JSON.stringify(caption));
+        let targetIdx = _caption.list.findIndex(x => x.idx === target);
+        if(targetIdx >= 0){
+            _caption.list.splice(targetIdx, 1);
+        }
+        setTarget(null);
+        setCaption(_caption);
+    }
+
+    const handleChangeTime = (value, domUpdate = true) => {
+        let time = parseFloat(value)
+        setCurrentTime(time); 
+        if(domUpdate){
+            video.current.currentTime = time;
         }
     }
+
+    const handleSubmit = e => {
+        const data = {caption};
+        Axios.post("/")
+    }
+
+    // effect
 
     useEffect(() => {
         // 이미지 추출
@@ -85,7 +118,7 @@ export default function Editor(props){
                                             key: video.currentTime ,
                                             src,
                                             alt: video.currentTime,
-                                            onClick: handleClickImage,
+                                            onClick: () => handleChangeTime(video.currentTime),
                                         }
                                     );
                                 });
@@ -137,6 +170,20 @@ export default function Editor(props){
 
     }, []);
 
+    useEffect(() => {
+        let targetItem = caption.list.find(x => x.idx === target);
+        if(targetItem){
+            const {startTime, endTime, text} = targetItem;
+            setStartTime(startTime);
+            setEndTime(endTime);
+            setText(text);
+        } else {
+            setStartTime(0);
+            setEndTime(0);
+            setText('');
+        }
+    }, [target]);
+
     return  <div>
                 <div className="mb-4">
                     <p className="fx-3 font-weight-bold mb-2">자막 편집기</p>
@@ -144,7 +191,13 @@ export default function Editor(props){
                 </div>       
                 <div className="row video-line">
                     <div className="col-sm-12 col-md-9">
-                        <Video _ref={video} movie={movie} caption={caption} />
+                        <Video 
+                            _ref={video} 
+                            movie={movie} 
+                            caption={caption}
+                            currentTime={currentTime}
+                            onChangeTime={handleChangeTime} 
+                        />
                     </div>
                     <div className="col-sm-12 col-md-3 h-md-100">
                         <div className="capture-line custom-scrollbar">
@@ -161,14 +214,20 @@ export default function Editor(props){
                         </div>
                     </div>
                     <div className="col-12 mt-4">
-                        <CaptionLine caption={caption} />
+                        <CaptionLine target={target} caption={caption} movie={movie} onChangeTime={handleChangeTime} onChangeTarget={value => setTarget(value)} />
                     </div>
                     <div className="col-12 mt-4">
                         <Form 
                             video={video} 
-                            target={captionTarget} 
+                            text={text}
+                            startTime={startTime}
+                            endTime={endTime}
                             onPushCaption={handlePushCaption} 
-                            onChangeTarget={changeTarget}
+                            onPopCaption={handlePopCaption}
+                            onChangeStartTime={handleChangeStartTime}
+                            onChangeEndTime={handleChangeEndTime}
+                            onChangeText={handleChangeText}
+                            onSubmit={handleSubmit}
                         />
                     </div>
                 </div>
