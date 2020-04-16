@@ -12,7 +12,6 @@ export default function Upload(props){
         if(!user) {
             createToast("로그인이 필요합니다!", "이 페이지는 로그인을 필요로 합니다! 로그인 후 다시 시도하여 주시기 바랍니다.")
             router.replace("/sign-in");
-            return <></>;
         }
     }, [])
     

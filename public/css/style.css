@@ -14,7 +14,7 @@ ol, ul { list-style: none; }
 .text-shadow { text-shadow: 0 1px 4px #000a; }
 .keep-all { word-break: keep-all; }
 .pointer { cursor: pointer; }
-.padding { padding: 120px 0; }
+.padding { padding-top: 120px; padding-bottom: 120px; }
 
 .bg-none { background: none; }
 .full-height { min-height: calc( 100vh - 165px ); }

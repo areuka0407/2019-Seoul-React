@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {toast} from 'react-toastify';
-import '../../../../helper';
+import Axios from 'axios';
+import {createToast} from '../../../../helper';
 
 toast.configure({
     autoClose: false,
@@ -79,6 +80,7 @@ export default function UploadForm(props){
             const video = document.createElement("video")
             video.src = URL.createObjectURL(file);
             video.name = file.name;
+            video.file = file;
             video.onloadedmetadata = () => {
                 setVideo(video);
                 setTimeline(0);
@@ -113,6 +115,34 @@ export default function UploadForm(props){
         }
     };
     
+    const handlerSubmit = e => {
+        e.preventDefault();
+        if(title.trim() === ""){
+            createToast("영상 제목을 입력해 주세요!");
+        } else if(description.trim() === ""){
+            createToast("영상 설명을 입력해 주세요!");
+        } else if(!video || !video.src){
+            createToast("영상을 업로드해 주세요!");
+        } else if(thumbnail === "" || !thumbnail) {
+            createToast("섬네일을 업로드해 주세요!");
+        } else {
+            let formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("allowDownload", allowDownload);
+            formData.append("thumbnail", thumbnail);
+            formData.append("video", video.file);
+            console.log(formData);
+
+            Axios.post("/api/videos", formData, { headers: { 'Content-type': 'multipart/form-data' }, maxContentLength: 50 * 1024 * 1024 })
+            .then(res => {
+                console.log("Response :", res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+    }
 
     /**
      * Effect
@@ -134,7 +164,7 @@ export default function UploadForm(props){
 
 
     return (
-        <form method="post" encType="multipart/form-data" autoComplete="off">
+        <form method="post" encType="multipart/form-data" autoComplete="off" onSubmit={handlerSubmit}>
             <div className="row">
                 <div className="col-sm-12 col-md-3 py-2 px-4">
                     <span className="font-weight-bold fx-2">영화 정보</span>

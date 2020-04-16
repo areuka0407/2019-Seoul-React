@@ -57,6 +57,11 @@ function Signin(props){
                 }
 
                 @media(max-width: 992px) {
+                    .left {
+                        padding: 0 30px;
+                        justify-content: center;
+                    }
+
                     .right {
                         padding-left: 3em;
                         padding-right: 3em;

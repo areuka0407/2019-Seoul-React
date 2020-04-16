@@ -23,7 +23,11 @@ export default function Editor(props){
 
     const handleChangeText = e => setText(e.target.value);
 
-    const handleChangeStartTime = value => setStartTime(parseFloat(value));
+    const handleChangeStartTime = value => {
+        let time = parseFloat(value);
+        setStartTime(time);
+        handleChangeTime(time);
+    };
 
     const handleChangeEndTime = value => setEndTime(parseFloat(value));
 

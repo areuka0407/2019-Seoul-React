@@ -52,9 +52,9 @@ const Comment = require('./models/comment');
     return Promise.all(
       comments.map(async ({idx, comment, user_idx, video_idx, date}) => {
          const video = await Video.findOne({idx: video_idx});
-
          const user = await User.findOne({idx: user_idx});
-         let new_comment = new Comment({idx, comment, user, date});;
+
+         let new_comment = new Comment({idx, comment, user, date, video});;
          await new_comment.save();
 
          await video.addComment(new_comment);

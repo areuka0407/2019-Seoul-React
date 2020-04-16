@@ -8,6 +8,16 @@ Date.prototype.toLocaleDateString = function(){
     return `${this.getFullYear()}년 ${this.getMonth() + 1}월 ${this.getDate()}일`;
 }
 
+Date.prototype.toLocaleTimeString = function(){
+    let hour = this.getHours();
+    let minute = this.getMinutes();
+
+    if(hour < 10) hour = "0" + hour;
+    if(minute < 10) minute = "0" + minute;
+
+    return `${this.getFullYear()}년 ${this.getMonth() + 1}월 ${this.getDate()}일 ${hour}시 ${minute}분`;
+}
+
 String.prototype.toTime = function(){
     let split = this.split(":");
     let min = parseInt(split[0]) * 60;

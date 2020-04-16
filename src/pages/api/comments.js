@@ -31,6 +31,7 @@ async function insertComment(req, res){
     comment.comment = text;
     comment.user = user;
     comment.date = date;
+    comment.video = video;
     await comment.save();
 
     await video.addComment(comment);

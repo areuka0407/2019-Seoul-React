@@ -4,7 +4,13 @@ import User from '../../../models/user';
 function getVideo(req, res){
     Video.findOne({idx: req.query.id})
     .populate("user")
-    .populate("comments")
+    .populate({
+        path: "comments",
+        populate: {
+            path: "user",
+            select: "id name img",
+        }
+    })
     .exec((err, video) => {
         if(err) 
             res.status(404).json({result: false, message: "데이터를 가져오지 못했습니다.."});
@@ -55,6 +61,11 @@ function getVideoListOnlyMine(req, res){
     }
 }
 
+function insertVideo(req, res){
+    console.log(req.body, req.files);
+    res.status(400).json(req.body);
+}
+
 export default (req, res) => {
     switch(req.method){
         case "GET": 
@@ -67,5 +78,7 @@ export default (req, res) => {
             else
                 getVideoList(req, res);
             break;
+        case "POST":
+            insertVideo(req, res);
     }
 };  

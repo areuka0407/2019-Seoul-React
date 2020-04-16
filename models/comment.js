@@ -21,6 +21,7 @@ var commentSchema = new mongoose.Schema({
     idx: {type: Number, required: true, unique: true},
     comment: String,
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    video: {type: mongoose.Schema.Types.ObjectId, ref: "Video"},
     date: Date,
 });
 
