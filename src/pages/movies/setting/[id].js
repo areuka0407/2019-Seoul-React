@@ -60,7 +60,7 @@ function Setting(props){
                                         <span></span>
                                     </div>
                                 </div>
-                                <div className={"menu-item" + (page == 'editor' ? " active" : "")} onClick={() => {setPage('editor'); setLoading(true);}}>
+                                <div className={"menu-item" + (page == 'editor' ? " active" : "")} onClick={() => {setPage('editor'); (page !== 'editor' && setLoading(true));}}>
                                     <span>자막 편집기</span>
                                     <div className="arrow">
                                         <span></span>

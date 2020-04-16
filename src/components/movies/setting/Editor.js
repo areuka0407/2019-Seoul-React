@@ -46,9 +46,11 @@ export default function Editor(props){
                 let newCaption = { idx: _caption.length++, startTime, endTime, text }
                 _caption.list.push(newCaption);
             }
-            console.log(_caption);
             setCaption(_caption);
             setTarget(null);
+            setStartTime(0);
+            setEndTime(0);
+            setText('');
         }
     }
 
@@ -72,12 +74,19 @@ export default function Editor(props){
     }
 
     const handleSubmit = e => {
-        const data = {caption};
-        Axios.post("/")
+        if(!confirm("정말로 자막을 수정하시겠습니까?")) return;
+
+        Axios.put(`/api/videos/${movie.idx}/caption`, {caption})
+        .then(res => {
+            if(res.status === 200){
+                createToast("자막 수정 완료!", "지금부터 수정된 자막으로 영상이 보여집니다!", "success");
+            } else  {
+                createToast("자막 수정 오류!", "문제가 발생하였습니다. 잠시 후 다시 시도해 주시기 바랍니다.");
+            }
+        });
     }
 
     // effect
-
     useEffect(() => {
         // 이미지 추출
         let loadCaptureImage = async () => {

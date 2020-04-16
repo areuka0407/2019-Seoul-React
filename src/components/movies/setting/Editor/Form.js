@@ -8,7 +8,8 @@ export default function Form(props){
         onPopCaption,
         onChangeStartTime, 
         onChangeEndTime, 
-        onChangeText} = props;
+        onChangeText,
+        onSubmit} = props;
 
     return  <>
                 <div className="input-line d-flex flex-wrap align-items-start">
@@ -66,7 +67,7 @@ export default function Form(props){
                                 </button>
                             </div>
                             <div>
-                                <button className="fill-btn">
+                                <button className="fill-btn" onClick={onSubmit}>
                                     저장하기
                                 </button>
                             </div>

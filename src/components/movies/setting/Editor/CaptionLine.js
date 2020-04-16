@@ -7,7 +7,7 @@ function CaptionItem(props){
 
     const handleClick = e => {
         onChangeTime(info.startTime);
-        onClick();
+        onClick(e);
     }
 
     useEffect(() => {
@@ -47,7 +47,12 @@ function CaptionItem(props){
 export default function CaptionLine(props){
     const {caption, movie, target, onChangeTime, onChangeTarget} = props;
 
-    return  <div className="caption-line">
+    const handleClickItem = (e, item) => {
+        e.stopPropagation();
+        onChangeTarget(item.idx);
+    }
+
+    return  <div className="caption-line" onClick={() => onChangeTarget(null)}>
                 { 
                     caption.list.map(item => <CaptionItem 
                         key={item.idx} 
@@ -55,7 +60,7 @@ export default function CaptionLine(props){
                         movie={movie} 
                         active={item.idx === target}
                         onChangeTime={onChangeTime}
-                        onClick={() => onChangeTarget(item.idx)}
+                        onClick={e => handleClickItem(e, item)}
                     />) 
                 }
 
