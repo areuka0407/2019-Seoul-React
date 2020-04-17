@@ -114,9 +114,8 @@ async function insertVideo(req, res){
 
         // 이미지 데이터 검증
         let matches = thumbnail.match(/data:image\/(?<ext>jpeg|png);base64,(?<data>.+)/);
-        console.log(thumbnail, matches);
         let imageData = matches.groups.data;
-        let imageExt = "." + matches.groups.ext;
+        let imageExt = matches.groups.ext;
 
         if(!matches){
             res.status(400).send("올바른 형식의 데이터가 아닙니다.");
@@ -139,7 +138,8 @@ async function insertVideo(req, res){
         // 이미지 업로드
         fs.writeFileSync(
             path.join(imagePath, `${filename}.${imageExt}`), 
-            imageData
+            imageData,
+            "base64"
         );
 
         // 비디오 업로드
@@ -155,7 +155,7 @@ async function insertVideo(req, res){
         video.description = description;
         video.allowed = allowed;
         video.video = filename + "." + videoExt;
-        video.thumbnail = filename + "." + matches.groups.ext;
+        video.thumbnail = filename + "." + imageExt;
         video.user = req.session.user._id;
         video.date = new Date();
         video.duration = duration;
