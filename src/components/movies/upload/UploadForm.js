@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {toast} from 'react-toastify';
+import {useRouter} from 'next/router';
 import Axios from 'axios';
+import {toast} from 'react-toastify';
 import {createToast} from '../../../../helper';
 
 toast.configure({
@@ -9,6 +10,7 @@ toast.configure({
 });
 
 export default function UploadForm(props){
+    const router = useRouter();
     const toastInfo = {
         className: "react-toast bg-danger text-white",
         bodyClassName: "keep-all fx-n2 px-3 pt-2 pb-4",
@@ -111,11 +113,12 @@ export default function UploadForm(props){
         // upload
         else {
             let thumbnailURL = URL.createObjectURL(file);
+            console.log(thumbnailURL);
             setThumbnail(thumbnailURL);
         }
     };
     
-    const handlerSubmit = e => {
+    const handlerSubmit = async e => {
         e.preventDefault();
         if(title.trim() === ""){
             createToast("영상 제목을 입력해 주세요!");
@@ -126,21 +129,31 @@ export default function UploadForm(props){
         } else if(thumbnail === "" || !thumbnail) {
             createToast("섬네일을 업로드해 주세요!");
         } else {
-            let formData = new FormData();
+            const MB50 = 1024 * 1024 * 50;
+            const formData = new FormData();
             formData.append("title", title);
             formData.append("description", description);
-            formData.append("allowDownload", allowDownload);
+            formData.append("allowed", allowDownload);
             formData.append("thumbnail", thumbnail);
             formData.append("video", video.file);
-            console.log(formData);
+            formData.append("duration", video.duration);
 
-            Axios.post("/api/videos", formData, { headers: { 'Content-type': 'multipart/form-data' }, maxContentLength: 50 * 1024 * 1024 })
+            Axios.post("/api/videos", formData, {
+                maxContentLength: MB50,
+                maxBodyLength: MB50,
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
             .then(res => {
-                console.log("Response :", res);
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                if(res.status === 200){
+                    createToast("업로드 성공!", "새로운 영화가 업로드 될 겁니다! 모두가 이걸 좋아하면 좋겠네요!", "success");
+                    router.replace("/");
+                }
+                else {
+                    createToast("업로드 실패….", res.data);
+                }
+            });
         }
     }
 

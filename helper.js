@@ -60,3 +60,12 @@ export function createToast(title, message, type = "danger"){
     </>,
     toastInfo)
 }
+
+
+export function randomStr(length){
+    const str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+    let result = "";
+    for(let i = 0; i < length; i++)
+        result += str[parseInt(Math.random() * str.length - 1)];
+    return result;
+}

@@ -2,7 +2,6 @@ const express = require('express')
 const next = require('next')
 const session = require('express-session');
 const passport = require('passport');
-// const fileUpload = require('express-fileupload');
 
 require('./database');
 require('./passport');
@@ -17,10 +16,6 @@ const handle = app.getRequestHandler()
 app.prepare().then(() => {
   const server = express()
 
-  // // 파일 업로드 설정
-  // server.use(fileUpload({
-  //   limits: {fileSize: 50 * 1024 * 1024},
-  // }))
 
   // passport 설정
   server.use(passport.initialize());

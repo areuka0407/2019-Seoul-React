@@ -4,14 +4,28 @@ import CommentArea from '../../components/movies/info/Comment';
 import Userinfo from '../../components/movies/info/Userinfo';
 import Movieinfo from '../../components/movies/info/Movieinfo';
 import Axios from 'axios';
+import {useEffect} from 'react';
+import {useRouter} from 'next/router';
+import {createToast} from '../../../helper';
 import '../../../helper';
 
 
 
 function Movie(props){
+    const router = useRouter();
     const {video, caption} = props;
+    
+    useEffect(() => {
+        if(!video){
+            createToast("영화를 찾을 수 없어요...", "이 영화는 존재하지 않습니다! URL 주소를 다시 한번 확인해 주세요!");
+            router.replace('/');
+        }
+    }, []);
 
     return (
+        !video ?
+        <></>
+        :
         <div>
             <Visual 
                 mainTitle="Movie Information" 
@@ -52,7 +66,7 @@ Movie.getInitialProps = async function(ctx){
 
 
     let caption = "";
-    if(video.caption !== null){
+    if(video && video.caption !== null){
         let req = await Axios.get("/caption/" + video.caption);
         caption = req.data;
         let list = [];
