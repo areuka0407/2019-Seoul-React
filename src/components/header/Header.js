@@ -45,7 +45,7 @@ function Header(props){
                                 </a>
                             </Link>
                         </div>
-                        <div className="nav-list d-none d-lg-flex">
+                        <div className="nav-list d-none d-lg-flex position-center">
                             <NavItem text={"영화제 배급사"} url={"/distributor"} onClick={handleClick} />
                             <NavItem text={"추천 영화"} url={"/movies/recommend"} onClick={handleClick} />
                             <NavItem text={"예고편 업로드"} url={"/movies/upload"} onClick={handleClick} />
