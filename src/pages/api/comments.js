@@ -23,6 +23,9 @@ async function insertComment(req, res){
         res.status(200).json({comment: null, message: "로그인 된 사용자만 댓글을 작성하실 수 있습니다."});
         return;
     }
+    else if(text.trim() === ""){
+        res.status(200).json({comment: null, message: "댓글을 입력해 주세요."});
+    }
     
 
     let video = await Video.findOne({idx: video_id});

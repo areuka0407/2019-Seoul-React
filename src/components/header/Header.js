@@ -148,14 +148,14 @@ function Header(props){
                     height: 100vh;
                     background-color: #000a;
                     z-index: 100;
-                    opacity: 0;
                     transition: 0.5s;
-                    display: none;
+                    opacity: 0;
+                    pointer-events: none;
                 }
 
                 .mobile-nav.active {
-                    display: block;
                     opacity: 1;
+                    pointer-events: all;
                 }
             `}</style>
         </>

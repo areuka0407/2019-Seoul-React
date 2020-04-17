@@ -17,6 +17,7 @@ function randomStr(length = 30){
 
 function getUserList(req, res){
     User.find()
+    .populate("videos")
     .then(userList => {
         res.status(200).json({userList});
     });

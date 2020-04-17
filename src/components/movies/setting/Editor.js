@@ -84,6 +84,8 @@ export default function Editor(props){
         .then(res => {
             if(res.status === 200){
                 createToast("자막 수정 완료!", "지금부터 수정된 자막으로 영상이 보여집니다!", "success");
+                
+                window.open("/movies/" + movie.idx, "_blank")
             } else  {
                 createToast("자막 수정 오류!", "문제가 발생하였습니다. 잠시 후 다시 시도해 주시기 바랍니다.");
             }

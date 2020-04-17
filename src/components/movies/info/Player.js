@@ -116,7 +116,6 @@ export default function Player(props){
 
     let currentCaption = caption && caption.find(c => c.startTime <= currentTime && currentTime <= c.endTime);
 
-
     // handles
     function handleTimecontrol(e){
         const $video = document.querySelector("#player video");
@@ -266,6 +265,7 @@ export default function Player(props){
                     display: flex;
                     justify-content: space-between;
                     flex-wrap: wrap;
+                    background-color: #000a;
                 }
 
                 button {

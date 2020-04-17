@@ -67,6 +67,18 @@ export default class Distributor extends React.Component {
                                 .sort((a, b) => {
                                     if(orderKey === "follower"){
                                         return orderArrow === "asc" ? a.follower.length - b.follower.length : b.follower.length - a.follower.length;
+                                    } else if(orderKey === 'popular'){
+                                        // 조회수의 합 비교
+                                        let a_totalView = a.videos.reduce((p, c) => p + c.view.reduce((p, c) => p + c.count, 0), 0);
+                                        let b_totalView = b.videos.reduce((p, c) => p + c.view.reduce((p, c) => p + c.count, 0), 0);
+
+                                        let a_result = a_totalView / a.videos.length * a.follower.length;
+                                        let b_result = b_totalView / b.videos.length * b.follower.length;
+
+                                        let result = a_result - b_result;
+                                        if(result === 0) result = a.created_at - b.created_at;
+
+                                        return result * ( orderArrow === 'asc' ? 1 : -1 );
                                     }
                                 })
                                 .map((user, i) => <Listitem 

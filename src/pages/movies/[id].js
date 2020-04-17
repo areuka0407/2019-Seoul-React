@@ -13,7 +13,7 @@ import '../../../helper';
 
 function Movie(props){
     const router = useRouter();
-    const {video, caption} = props;
+    const {video, caption, user} = props;
     
     useEffect(() => {
         if(!video){
@@ -41,7 +41,7 @@ function Movie(props){
                         <Player video={video} caption={caption} />
                     </div>
                     <div className="px-3 mt-5">
-                        <Movieinfo moviedata={video} />      
+                        <Movieinfo moviedata={video} user={user} />      
                     </div>
                     <hr className="mx-3 my-4" />
                     <div className="px-3 mt-4">
@@ -63,6 +63,14 @@ Movie.getInitialProps = async function(ctx){
                                 path: 'user'
                             }
                         });
+    
+    const current = new Date();
+    const firstDay = new Date(current.getFullYear(), current.getMonth(), 1, 9, 0, 0);
+    const findView = video.view.find(v => v.date.getTime() == firstDay.getTime());
+
+    if(findView) findView.count++;
+    else video.view.push({date: firstDay, count: 1});
+    await video.save();
 
 
     let caption = "";

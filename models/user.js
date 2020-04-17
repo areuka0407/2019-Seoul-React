@@ -25,7 +25,8 @@ var userSchema = new mongoose.Schema({
     videos: [ { type: mongoose.Schema.Types.ObjectId, ref: "Video" } ],
     following: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
     follower: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
-    recommends: [ { type: mongoose.Schema.Types.ObjectId, ref: "Video" } ]
+    recommends: [ { type: mongoose.Schema.Types.ObjectId, ref: "Video" } ],
+    created_at: { type: Date, default: new Date() }
 });
 
 // 비디오 추가
@@ -36,12 +37,24 @@ userSchema.methods.addVideo = function(video){
 
 // 팔로잉
 userSchema.methods.addFollow = function(user){
-    this.following.push(user);
-    user.follower.push(this);
+    if(!this.following.includes(user._id)) 
+        this.following.push(user);
+    if(!user.follower.includes(this._id)) 
+        user.follower.push(this);
 
     return Promise.all([this.save(), user.save()]);
 }
 
+// 언팔로우
+userSchema.methods.removeFollow = function(user){
+    let indexMe = this.following.findIndex(f => f == user._id);
+    let indexYou = user.follower.findIndex(f => f == this._id);
+
+    if(indexMe >= 0) this.following.splice(indexMe, 1);
+    if(indexYou >= 0) user.follower.splice(indexYou, 1);
+
+    return Promise.all([this.save(), user.save()]);
+}
 
 
 /**

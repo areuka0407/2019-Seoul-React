@@ -45,10 +45,25 @@ videoSchema.methods.addComment = function(comment){
     return this.save();
 }
 
-videoSchema.methods.addRecommend = function(user){
-    this.recommends.push(user);
-    user.recommends.push(this);
-    return Promise.all([this.save(), user.save()]);
+videoSchema.methods.addRecommend = async function(user){
+    if(!this.recommends.includes(user._id))
+        this.recommends.push(user);
+    if(!user.recommends.includes(this._id))
+        user.recommends.push(this);
+    
+    await Promise.all([this.save(), user.save()]);
+    return [this, user];
+}
+
+videoSchema.methods.removeRecommend = async function(user){
+    let videoIdx = this.recommends.findIndex(r => r == user._id);
+    let userIdx = user.recommends.findIndex(r => r == this._id);
+
+    if(videoIdx >= 0) this.recommends.splice(videoIdx, 1);
+    if(userIdx >= 0) user.recommends.splice(userIdx, 1);
+
+    await Promise.all([this.save(), user.save()]);
+    return [this, user];
 }
 
 videoSchema.methods.addView = function(increase = 1, standard = new Date()){

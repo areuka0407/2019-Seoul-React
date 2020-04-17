@@ -62,8 +62,8 @@ ol, ul { list-style: none; }
 
 
 .fill-btn {
-    background-color: #222;
-    color: #fff;
+    background-color: #222!important;
+    color: #fff!important;
     padding: 0.4em 0.8em;
     border: none;
     transition: 0.3s;

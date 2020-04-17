@@ -1,5 +1,6 @@
-import {useState} from 'react';
 import Axios from 'axios';
+import {useState} from 'react';
+import {createToast} from '../../../../helper';
 
 export default function Info(props){
     const {movie} = props;
@@ -15,7 +16,11 @@ export default function Info(props){
 
         Axios.put("/api/videos/" + movie.idx, {title, description, allowDownload})
         .then(res => {
-            console.log("Response", res);
+            if(res.status === 200) {
+                createToast("영상 수정 완료!", res.data, "success");
+            } else {
+                createToast("영상 수정 실패….", res.data);
+            }
         });
     }
 
