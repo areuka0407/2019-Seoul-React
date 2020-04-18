@@ -20,19 +20,16 @@ function Recommend(props){
     useEffect(() => {
         Axios.get("/api/sessions")
         .then(({data}) => {
-            if(data){
-                let list = data.recommends.map(rec => rec.user);
-                return Promise.all(
-                    list.map(user => Axios.get("/api/users?id=" + user.id))
-                )
-            }
-        }).then(results => {
-            let userList = results.map(result => result.data.user);
+            const recommendList = data.recommends;
+            let userList = recommendList.map(x => ({
+                ...x.user,
+                videos: recommendList.filter(y => x.user.idx == y.user.idx)
+            }));
+            console.log(userList);
             setUserList(userList);
         });
     }, []);
 
-    console.log(userList);
     return (
         <div>
             <Visual mainTitle="Recommend Movie List" subTitle="내가 추천한 영화 목록" src="/images/more_img_7.jpeg" />
@@ -66,5 +63,6 @@ function Recommend(props){
         </div>
     )
 }
+
 
 export default Recommend;

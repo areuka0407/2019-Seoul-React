@@ -2,7 +2,6 @@ import Link from 'next/link';
 
 export default function VideoItem(props){
     const {info} = props;
-    console.log(info);
     return (
         <Link href="/movies/[id].js" as={"/movies/" + info.idx}>
             <div className="video-item d-flex align-items-center">

@@ -33,11 +33,13 @@ export default function Movieinfo(props){
         else {
             Axios.delete(`/api/videos/${moviedata.idx}/recommends`)
             .then(res => {
+                console.log(res);
                 createToast("추천 목록에서 제거되었습니다.", res.data, "info");;
                 setRecommended(false);
             })
             .catch(err => {
-                createToast("추천 취소 실패….", err.response.data);
+                console.error(err);
+                createToast("추천 취소 실패….", "잠시 후 다시 시도해 주시기 바랍니다.");
             });
         }
     } 
