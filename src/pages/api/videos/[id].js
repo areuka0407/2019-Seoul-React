@@ -2,7 +2,7 @@ import Video from '../../../../models/video';
 
 async function selectVideo(req, res){
     let video = await Video.findOne({idx: req.query.id});
-    res.status(200).json(video).end();
+    res.status(200).json(video);
 }
 
 async function updateVideo(req, res){

@@ -233,6 +233,7 @@ export default function Editor(props){
                     </div>
                     <div className="col-12 mt-4">
                         <Form 
+                            movie={movie}
                             video={video} 
                             text={text}
                             startTime={startTime}

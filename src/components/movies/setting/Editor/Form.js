@@ -1,5 +1,6 @@
 export default function Form(props){
     const {
+        movie,
         video, 
         text,
         startTime,
@@ -10,6 +11,13 @@ export default function Form(props){
         onChangeEndTime, 
         onChangeText,
         onSubmit} = props;
+
+    const handleDownload = () => {
+        let a = document.createElement("a");
+        a.href = `/api/videos/${movie.idx}/caption`;
+        a.download = movie.title + ".txt";
+        a.click();
+    }
 
     return  <>
                 <div className="input-line d-flex flex-wrap align-items-start">
@@ -67,6 +75,9 @@ export default function Form(props){
                                 </button>
                             </div>
                             <div>
+                                <button className="white-fill-btn mr-3" onClick={handleDownload}>
+                                    내보내기
+                                </button>
                                 <button className="fill-btn" onClick={onSubmit}>
                                     저장하기
                                 </button>
