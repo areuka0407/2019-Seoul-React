@@ -1,5 +1,10 @@
 import Video from '../../../../models/video';
 
+async function selectVideo(req, res){
+    let video = await Video.findOne({idx: req.query.id});
+    res.status(200).json(video).end();
+}
+
 async function updateVideo(req, res){
     const {title, description, allowDownload} = req.body;
     
@@ -28,6 +33,8 @@ async function updateVideo(req, res){
 
 export default (req, res) => {
     switch(req.method){
+        case "GET":
+            selectVideo(req, res);
         case "PUT":
             updateVideo(req, res);
     }

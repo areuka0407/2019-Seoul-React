@@ -18,6 +18,24 @@ Date.prototype.toLocaleTimeString = function(){
     return `${this.getFullYear()}년 ${this.getMonth() + 1}월 ${this.getDate()}일 ${hour}시 ${minute}분`;
 }
 
+Date.prototype.toDetailTimeString = function(){
+    let month = this.getMonth() + 1;
+    let date = this.getDate();
+
+    let hour = this.getHours();
+    let minute = this.getMinutes();
+    let second = this.getSeconds();
+
+    if(month < 10) month = "0" + month;
+    if(date < 10) date = "0" + date;
+
+    if(hour < 10) hour = "0" + hour;
+    if(minute < 10) minute = "0" + minute;
+    if(second < 10) second = "0" + second;
+
+    return `${this.getFullYear()}-${month}-${date} ${hour}:${minute}:${second}`;
+}
+
 String.prototype.toTime = function(){
     let split = this.split(":");
     let min = parseInt(split[0]) * 60;

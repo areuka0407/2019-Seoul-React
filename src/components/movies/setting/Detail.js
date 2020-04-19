@@ -1,12 +1,28 @@
 import {useState, useEffect, useRef} from 'react';
 import '../../../../helper';
 import Chart from 'chart.js';
+import Axios from 'axios';
 
 
 function Canvas(props){
-    const [viewData, setViewData] = useState(props.viewData);
-    
+    const {movie} = props;
+    const [updateTime, setUpdateTime] = useState(new Date());
+    const [viewData, setViewData] = useState([]);
     const root = useRef(null);
+
+
+    useEffect(() => {
+        getViewData(movie.idx).then(data => {
+            setViewData(data);
+        });
+        // 10초마다 View 데이터를 다시 불러오도록 변경
+        setInterval(() => {
+            getViewData(movie.idx).then(data => {
+                setViewData(data);
+                setUpdateTime(new Date());
+            })
+        }, 10000);
+    }, []);
 
     useEffect(() => {
         let ctx = root.current.getContext("2d");
@@ -43,10 +59,11 @@ function Canvas(props){
                     display: false
                 }
             }
-        })
+        });
     }, [viewData]);  
 
     return  <>
+                <p className="fx-n3 text-muted">업데이트 시간: {updateTime.toDetailTimeString()}</p>
                 <canvas 
                     ref={root}
                 >
@@ -57,8 +74,39 @@ function Canvas(props){
 }
 
 export default function Detail(props){    
+    let {movie} = props;
+
+    return  <div>
+                <div className="mb-3">
+                    <p className="fx-3 font-weight-bold mb-2">월별 조회수 증가량 분석</p>
+                    <p className="fx-n1 text-muted">해당 동영상의 조회수 증가에 대해 알아보세요!</p>
+                </div>       
+                <div className="canvas-wrap custom-scrollbar">
+                    <Canvas movie={movie} />
+                </div>
+                <style jsx>{`
+                    .canvas-wrap {
+                        max-width: 100%;
+                        height: 450px;
+                        overflow-y: hidden;
+                        overflow-x: auto;
+                    }
+
+                    select {
+                        line-height: 1.5em;
+                        padding: 0.2em 1em 0.2em 1em;
+                    }
+                `}</style>
+            </div>
+}
+
+
+async function getViewData(id){
+    let req = await Axios.get("/api/videos/" + id);
+    let movie = req.data;
+
     // 데이터가 12개월 분만큼 존재하지 않는다면, 빈 데이터를 채워넣는다.
-    let viewData = props.movie.view.map(v => ({date: new Date(v.date), count: v.count}));
+    let viewData = movie.view.map(v => ({date: new Date(v.date), count: v.count}));
     let _viewData = [];
     let now = new Date();
     let sinceLastYear = new Date(now.getFullYear(), now.getMonth() - 12, 1, 9, 0, 0);
@@ -75,28 +123,6 @@ export default function Detail(props){
         thisMonth.setMonth(thisMonth.getMonth() - 1);
     }
     viewData = viewData.concat(_viewData);
-    
 
-    return  <div>
-                <div className="mb-3">
-                    <p className="fx-3 font-weight-bold mb-2">월별 조회수 증가량 분석</p>
-                    <p className="fx-n1 text-muted">해당 동영상의 조회수 증가에 대해 알아보세요!</p>
-                </div>       
-                <div className="canvas-wrap custom-scrollbar">
-                    <Canvas viewData={viewData} />
-                </div>
-                <style jsx>{`
-                    .canvas-wrap {
-                        max-width: 100%;
-                        height: 450px;
-                        overflow-y: hidden;
-                        overflow-x: auto;
-                    }
-
-                    select {
-                        line-height: 1.5em;
-                        padding: 0.2em 1em 0.2em 1em;
-                    }
-                `}</style>
-            </div>
+    return viewData;
 }
