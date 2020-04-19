@@ -69,3 +69,7 @@ export function randomStr(length){
         result += str[parseInt(Math.random() * str.length - 1)];
     return result;
 }
+
+export function toString(value){
+    return `${value}`;
+}

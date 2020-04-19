@@ -25,7 +25,6 @@ function Recommend(props){
                 ...x.user,
                 videos: recommendList.filter(y => x.user.idx == y.user.idx)
             }));
-            console.log(userList);
             setUserList(userList);
         });
     }, []);

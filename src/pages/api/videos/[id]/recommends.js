@@ -6,10 +6,15 @@ async function addRecommends(req, res){
         res.status(403).send("로그인 후 이용하실 수 있습니다.");
         return;
     }
+
     let user = await User.findOne({idx: req.session.user.idx});
     let video = await Video.findOne({idx: req.query.id});
     if(!video){
         res.status(404).send("해당 영상이 존재하지 않습니다.");
+        return;
+    }
+    if(video.user + "" == user._id){
+        res.status(403).send("자신의 영상은 추천하실 수 없습니다.");
         return;
     }
 
@@ -35,7 +40,6 @@ async function removeRecommends(req, res){
         res.status(404).send("해당 영상이 존재하지 않습니다.");
         return;
     }
-
     let [_video, _user] = await video.removeRecommend(user);
     req.session.user = _user;
 

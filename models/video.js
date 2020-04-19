@@ -1,6 +1,9 @@
 var mongoose = require('mongoose');
-require('./comment');
 mongoose.set('useCreateIndex', true);
+
+let {toString} =  require('../helper');
+require('./comment');
+
 
 /**
  * Auto-increment 설정
@@ -56,8 +59,8 @@ videoSchema.methods.addRecommend = async function(user){
 }
 
 videoSchema.methods.removeRecommend = async function(user){
-    let videoIdx = this.recommends.findIndex(r => r == user._id);
-    let userIdx = user.recommends.findIndex(r => r == this._id);
+    let videoIdx = this.recommends.findIndex(r => toString(r) == user._id);
+    let userIdx = user.recommends.findIndex(r => toString(r) == this._id);
 
     if(videoIdx >= 0) this.recommends.splice(videoIdx, 1);
     if(userIdx >= 0) user.recommends.splice(userIdx, 1);

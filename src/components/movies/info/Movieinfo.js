@@ -34,7 +34,7 @@ export default function Movieinfo(props){
             Axios.delete(`/api/videos/${moviedata.idx}/recommends`)
             .then(res => {
                 console.log(res);
-                createToast("추천 목록에서 제거되었습니다.", res.data, "info");;
+                createToast("추천 목록에서 제거되었습니다.", "이제 이 동영상은 추천 영화목록에서 볼 수 없을 것입니다!", "info");;
                 setRecommended(false);
             })
             .catch(err => {
