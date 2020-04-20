@@ -1,6 +1,6 @@
 import User from 'models/user';
 
-function pushRecommends(req, res){
+async function pushRecommends(req, res){
     if(!req.session.user){
         res.status(403).send("로그인 후 이용하실 수 있습니다.");
         return;
@@ -14,7 +14,7 @@ function pushRecommends(req, res){
     }
     await me.addFollow(you);
     
-    res.status(200).send("해당 배급사를 팔로우 하였습니다!"));
+    res.status(200).send("해당 배급사를 팔로우 하였습니다!");
 }
 
 export default (req, res) => {
